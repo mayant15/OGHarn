@@ -1,0 +1,9 @@
+blacklist:
+- xmlCleanupParser
+- xmlCleanupThreads
+- xmlCleanupGlobals
+- xmlCleanupInputCallbacks
+- xmlCleanupOutputBuffers
+- xmlCleanupCharEncodingHandlers
+- xmlMemoryDump
+- xmlInitParser

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="urn:example:feed" xmlns:m="urn:example:meta">
+  <entry m:rank="1"><name>Café</name></entry>
+</feed>

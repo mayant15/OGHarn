@@ -1,0 +1,4 @@
+<!DOCTYPE greeting [
+  <!ENTITY subject "world">
+]>
+<greeting>Hello, &subject;!</greeting>

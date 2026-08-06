@@ -6,6 +6,8 @@ ARG MULTIPLIER_RELEASE=e137812
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        autoconf \
+        automake \
         bear \
         build-essential \
         ca-certificates \
@@ -14,11 +16,15 @@ RUN apt-get update \
         cmake \
         curl \
         git \
+        liblzma-dev \
+        libtool \
         lld-18 \
         llvm-18-dev \
+        pkg-config \
         python3.12-dev \
         python3.12-venv \
         xz-utils \
+        zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/multiplier \

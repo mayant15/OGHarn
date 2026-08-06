@@ -1,0 +1,6 @@
+<catalog>
+  <book id="1" available="true">
+    <title>XML &amp; Parsers</title>
+    <price currency="USD">12.50</price>
+  </book>
+</catalog>

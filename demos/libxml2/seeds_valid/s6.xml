@@ -1,0 +1,4 @@
+<article lang="en">
+  Text before <emphasis level="strong">important</emphasis> text after.
+  <empty />
+</article>
