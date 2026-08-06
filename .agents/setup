@@ -39,6 +39,7 @@ exec podman --cgroup-manager=cgroupfs run --rm --network=host --userns=keep-id \
   --volume "\$repo_root:\$repo_root:Z" \
   --volume "\$repo_root/src:/OGHarn/src:Z" \
   --workdir "\$PWD" \
+  --env "PWD=\$PWD" \
   localhost/ogharn-orb:latest "\$@"
 EOF
 cat > "$HOME/.local/bin/ogharn.py" <<'EOF'

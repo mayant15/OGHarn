@@ -10,6 +10,7 @@ RUN apt-get update \
         build-essential \
         ca-certificates \
         clang-18 \
+        cmake \
         curl \
         git \
         lld-18 \
@@ -29,6 +30,10 @@ RUN git clone https://github.com/AFLplusplus/AFLplusplus.git /tmp/AFLplusplus \
     && make -C /tmp/AFLplusplus -j"$(nproc)" LLVM_CONFIG=llvm-config-18 all \
     && make -C /tmp/AFLplusplus install \
     && rm -rf /tmp/AFLplusplus
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libclang-rt-18-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN python3.12 -m venv /opt/ogharn-venv \
     && /opt/ogharn-venv/bin/pip install --no-cache-dir cfile==0.2.0 PyYAML
