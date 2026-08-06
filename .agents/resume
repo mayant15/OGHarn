@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# OGHarn has no persistent services. Setup's login-shell hook restores its
+# virtualenv and tool paths whenever an agent enters the repository.
+echo "[resume] No services need restarting"

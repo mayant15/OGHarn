@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export DEBIAN_FRONTEND=noninteractive
+
+echo "[setup] Installing the container engine"
+packages=(fuse-overlayfs podman slirp4netns uidmap)
+missing_packages=()
+for package in "${packages[@]}"; do
+  dpkg-query -W -f='${Status}' "$package" 2>/dev/null | grep -q 'ok installed' || missing_packages+=("$package")
+done
+if ((${#missing_packages[@]})); then
+  sudo apt-get update
+  sudo apt-get install -y --no-install-recommends "${missing_packages[@]}"
+fi
+
+mkdir -p "$HOME/.config/containers"
+if [[ ! -f "$HOME/.config/containers/storage.conf" ]]; then
+  cat > "$HOME/.config/containers/storage.conf" <<'EOF'
+[storage]
+driver = "overlay"
+
+[storage.options.overlay]
+mount_program = "/usr/bin/fuse-overlayfs"
+EOF
+fi
+
+echo "[setup] Building the repository's Dockerfile with Podman"
+podman --cgroup-manager=cgroupfs build --network=host --tag localhost/ogharn-orb:latest --file "$repo_root/Dockerfile" "$repo_root"
+
+echo "[setup] Installing live-source container wrappers"
+mkdir -p "$HOME/.local/bin"
+cat > "$HOME/.local/bin/ogharn-container" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+repo_root="$repo_root"
+exec podman --cgroup-manager=cgroupfs run --rm --network=host --userns=keep-id \
+  --volume "\$repo_root:\$repo_root:Z" \
+  --volume "\$repo_root/src:/OGHarn/src:Z" \
+  --workdir "\$PWD" \
+  localhost/ogharn-orb:latest "\$@"
+EOF
+cat > "$HOME/.local/bin/ogharn.py" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+exec ogharn-container /OGHarn/src/ogharn.py "$@"
+EOF
+chmod +x "$HOME/.local/bin/ogharn-container" "$HOME/.local/bin/ogharn.py"
+
+echo "[setup] OGHarn's container environment is ready"
