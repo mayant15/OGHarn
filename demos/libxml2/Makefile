@@ -19,7 +19,7 @@ DEPS = -I $(PWD)/$(LIB_NAME)/include \
 	   -L $(PWD)/$(LIB_NAME)/.libs
 
 DEPS_DYN = -lxml2 -lz -llzma
-DEPS_STC = -l:libxml2.a -lz -llzma
+DEPS_STC = -l:libxml2.a -lz -llzma -lm
 DEPS_LDD = $(PWD)/$(LIB_NAME)/.libs/
 
 #------------------------------------------------------------------------
