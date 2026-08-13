@@ -7,6 +7,7 @@ ARG MULTIPLIER_RELEASE=e137812
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         autoconf \
+        autogen \
         automake \
         bear \
         build-essential \
@@ -16,8 +17,15 @@ RUN apt-get update \
         cmake \
         curl \
         git \
+        libasound2-dev \
+        libflac-dev \
         liblzma-dev \
+        libmp3lame-dev \
+        libmpg123-dev \
+        libogg-dev \
+        libopus-dev \
         libtool \
+        libvorbis-dev \
         lld \
         llvm-dev \
         pkg-config \
