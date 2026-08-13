@@ -19,6 +19,7 @@ RUN apt-get update \
         git \
         libasound2-dev \
         libflac-dev \
+        libjpeg-dev \
         liblzma-dev \
         libmp3lame-dev \
         libmpg123-dev \
