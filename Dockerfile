@@ -11,15 +11,15 @@ RUN apt-get update \
         bear \
         build-essential \
         ca-certificates \
-        clang-18 \
-        libclang-rt-18-dev \
+        clang \
+        libclang-rt-dev \
         cmake \
         curl \
         git \
         liblzma-dev \
         libtool \
-        lld-18 \
-        llvm-18-dev \
+        lld \
+        llvm-dev \
         pkg-config \
         python3.12-dev \
         python3.12-venv \
@@ -34,7 +34,7 @@ RUN mkdir -p /opt/multiplier \
 
 RUN git clone https://github.com/AFLplusplus/AFLplusplus.git /tmp/AFLplusplus \
     && git -C /tmp/AFLplusplus checkout --detach "${AFLPLUSPLUS_COMMIT}" \
-    && make -C /tmp/AFLplusplus -j"$(nproc)" LLVM_CONFIG=llvm-config-18 all \
+    && make -C /tmp/AFLplusplus -j"$(nproc)" LLVM_CONFIG=llvm-config all \
     && make -C /tmp/AFLplusplus install \
     && rm -rf /tmp/AFLplusplus
 
