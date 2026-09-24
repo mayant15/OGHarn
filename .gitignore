@@ -4,6 +4,8 @@
 /demos/*/bin
 /demos/*/mx*
 /demos/*/out
+/demos/*/seeds_validcp
+/demos/*/seeds_invalidcp
 /extras/AFLplusplus
 /extras/llvm.sh
 /extras/multiplier
