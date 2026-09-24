@@ -9,7 +9,7 @@ index 7cfcbfe1..f13897f7 100644
 -CC= gcc
 -CFLAGS= -Wall -O2 $(MYCFLAGS) -fno-stack-protector -fno-common -march=native
 +CC ?= gcc
-+CFLAGS += -Wall $(MYCFLAGS) -fno-stack-protector -fno-common -march=native
++CFLAGS += -Wall $(MYCFLAGS) -fno-stack-protector -fno-common
  AR= ar rc
  RANLIB= ranlib
  RM= rm -f
