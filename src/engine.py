@@ -456,9 +456,17 @@ class CheckCompatibility:
                 function.ret_status_check = status
 
     # Categorize and set status checks for each function
-    def process_functions(self, api_functions, function_list, blacklist):
+    def process_functions(self, api_functions, function_list, blacklist, whitelist=None):
+        # whitelist is opt-in: if given and non-empty, only functions named
+        # in it are considered at all. blacklist is still applied on top, so
+        # it can subtract from a whitelist too (e.g. an overload you don't
+        # want). An empty/absent whitelist means "no opt-in restriction" and
+        # falls back to blacklist-only (opt-out) behavior.
+        whitelist = whitelist or set()
         for func in function_list:
             if func.name in blacklist:
+                continue
+            if whitelist and func.name not in whitelist:
                 continue
             self.classify_function(api_functions, func)
         for function in api_functions.getAllFunctions():
