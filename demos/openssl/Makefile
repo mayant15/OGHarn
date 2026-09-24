@@ -6,8 +6,10 @@ CXXFLAGS_ASAN	= -fsanitize=address,undefined
 LIB_NAME = lib
 LIB_REPO = https://github.com/openssl/openssl.git
 LIB_COMMIT = 3bd5319b5d0df9ecf05c8baba2c401ad8e3ba130
+SUPPORT_HDR = x509-support.h
 
 DEPS = -I $(PWD)/$(LIB_NAME)/include/ \
+	   -I $(PWD) \
 	   -L $(PWD)/$(LIB_NAME)/
 
 DEPS_DYN = -lssl -lcrypto -lpthread -ldl
@@ -40,7 +42,8 @@ lib_plain: # Plain build for indexing with multiplier
 		enable-tls1_3 enable-rc5 enable-md2 enable-ec_nistp_64_gcc_128 \
 		enable-ssl3 enable-ssl3-method enable-nextprotoneg \
 		enable-weak-ssl-ciphers -fno-sanitize=alignment && \
-	bear -- make -j12
+	bear -- make -j12 && \
+	bear --append -- $(CC) -I $(PWD)/$(LIB_NAME)_plain/include -I $(PWD) -x c -c -o /dev/null $(PWD)/$(SUPPORT_HDR)
 
 lib_fuzz: # build for fuzzing. Static linking with afl instrumentation
 	rm -rf $(LIB_NAME)_fuzz
