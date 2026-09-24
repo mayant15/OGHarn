@@ -315,6 +315,15 @@ def process_config_file(filename):
             check_blacklist if check_blacklist and len(check_blacklist) else set()
         )
 
+        # whitelist is opt-in: when non-empty, only these functions are
+        # considered at all (blacklist can still subtract from that set).
+        # When empty/absent, every found function is considered except
+        # what's blacklisted, same as before whitelist existed.
+        check_whitelist = loaded_config.get("whitelist")
+        whitelist = (
+            check_whitelist if check_whitelist and len(check_whitelist) else set()
+        )
+
         preamble_seq = (
             loaded_config.get("preamble_seq") if "preamble_seq" in loaded_config else []
         )
@@ -330,9 +339,9 @@ def process_config_file(filename):
     except Exception:
         if filename:
             print("WARNING: Reading of config file failed")
-        return set(), "", {}, ""
+        return set(), set(), "", {}, ""
 
-    return set(blacklist), preamble_seq, arg_keys, add_define_to_harness
+    return set(blacklist), set(whitelist), preamble_seq, arg_keys, add_define_to_harness
 
 
 def begin_harnessing_target(
@@ -691,8 +700,8 @@ if __name__ == "__main__":
     allow_lincov = args.allow_lincov
     allow_complex_aux_sequences = args.allow_deepaux
 
-    blacklist, preamble_seq, arg_keys, add_define_to_harness = process_config_file(
-        args.config
+    blacklist, whitelist, preamble_seq, arg_keys, add_define_to_harness = (
+        process_config_file(args.config)
     )
 
     try:
@@ -734,7 +743,7 @@ if __name__ == "__main__":
     )
 
     functions = engine.APIfunctions()
-    compatibility.process_functions(functions, function_list, blacklist)
+    compatibility.process_functions(functions, function_list, blacklist, whitelist)
 
     compatibility.checkrets(functions.getAllFunctions())
     

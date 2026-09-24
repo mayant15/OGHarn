@@ -1,0 +1,16 @@
+# Opt-in whitelist: exactly the API surface Traffic's
+# examples/libtiff/libtiff.tf targets -- tiff_open_r, tiff_open_w,
+# tiff_fuzz_read_strip, tiff_fuzz_read_rgba, tiff_fuzz_write_strip
+# (tiff-support.h), and TIFFClose, TIFFSetField, TIFFWriteDirectory
+# (tiffio.h). Everything else -- including the tiff_src_*/tiff_dst_*
+# internal TIFFClientOpen callbacks in tiff-support.h -- is dropped, same as
+# if it were blacklisted.
+whitelist:
+- tiff_open_r
+- tiff_open_w
+- tiff_fuzz_read_strip
+- tiff_fuzz_read_rgba
+- tiff_fuzz_write_strip
+- TIFFClose
+- TIFFSetField
+- TIFFWriteDirectory

@@ -81,7 +81,17 @@ failures that silently block all harnesses when using `-e` (execute_both).
 ### config.yaml (optional)
 
 ```yaml
-# Functions to skip (cleanup, init, side-effect-only, etc.)
+# Opt-in: when non-empty, ONLY these functions are considered at all (every
+# other function found in the -h headers is dropped, as if blacklisted).
+# Leave empty/omitted to consider everything except what's blacklisted.
+# Use this to restrict harnessing to a specific, known API surface (e.g. to
+# match a hand-written spec) instead of enumerating everything to exclude.
+whitelist:
+  - xmlNewParserCtxt
+  - xmlCtxtReadMemory
+
+# Functions to skip (cleanup, init, side-effect-only, etc.). Still applied
+# even when whitelist is set, so it can subtract from a whitelist too.
 blacklist:
   - xmlCleanupParser
   - xmlInitParser

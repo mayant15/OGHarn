@@ -1,9 +1,41 @@
-blacklist:
-- xmlCleanupParser
-- xmlCleanupThreads
-- xmlCleanupGlobals
-- xmlCleanupInputCallbacks
-- xmlCleanupOutputBuffers
-- xmlCleanupCharEncodingHandlers
-- xmlMemoryDump
+# Opt-in whitelist: exactly the API surface Traffic's
+# examples/libxml2/libxml2.tf targets -- xmlFree (libxml/globals.h); xmlNewDoc,
+# xmlFreeDoc, xmlCopyDoc, xmlNewNode, xmlFreeNode, xmlAddChild, xmlUnlinkNode,
+# xmlDocGetRootElement, xmlChildElementCount, xmlNodeIsText, xmlIsBlankNode,
+# xmlNodeGetContent, xmlGetProp, xmlHasProp (libxml/tree.h); xmlInitParser,
+# xmlNewParserCtxt, xmlFreeParserCtxt, xmlCtxtReadMemory (libxml/parser.h);
+# xmlParserInputBufferCreateStatic, xmlFreeParserInputBuffer
+# (libxml/xmlIO.h); and xmlNewTextReader, xmlFreeTextReader,
+# xmlTextReaderRead, xmlTextReaderNodeType, xmlTextReaderDepth,
+# xmlTextReaderIsEmptyElement, xmlTextReaderConstName (libxml/xmlreader.h).
+# Everything else declared in the -h headers is dropped, same as if it were
+# blacklisted.
+whitelist:
+- xmlFree
+- xmlNewDoc
+- xmlFreeDoc
+- xmlCopyDoc
+- xmlNewNode
+- xmlFreeNode
+- xmlAddChild
+- xmlUnlinkNode
+- xmlDocGetRootElement
+- xmlChildElementCount
+- xmlNodeIsText
+- xmlIsBlankNode
+- xmlNodeGetContent
+- xmlGetProp
+- xmlHasProp
 - xmlInitParser
+- xmlNewParserCtxt
+- xmlFreeParserCtxt
+- xmlCtxtReadMemory
+- xmlParserInputBufferCreateStatic
+- xmlFreeParserInputBuffer
+- xmlNewTextReader
+- xmlFreeTextReader
+- xmlTextReaderRead
+- xmlTextReaderNodeType
+- xmlTextReaderDepth
+- xmlTextReaderIsEmptyElement
+- xmlTextReaderConstName

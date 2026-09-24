@@ -1,0 +1,22 @@
+# Opt-in whitelist: exactly the API surface Traffic's
+# examples/openssl/openssl.tf targets -- d2i_X509, X509_free, X509_STORE_new,
+# X509_STORE_add_cert, X509_STORE_free (openssl/x509.h -- note
+# X509_STORE_new/_add_cert/_free are actually declared in x509_vfy.h in this
+# pinned commit, not x509.h, despite the .tf's `import "openssl/x509.h"`);
+# X509_STORE_CTX_new, X509_verify_cert, X509_STORE_CTX_get_error
+# (openssl/x509_vfy.h); and x509_fuzz_ctx_init, x509_fuzz_ctx_cleanup,
+# x509_fuzz_ctx_free (x509-support.h). Everything else -- including the
+# internal x509_fuzz_ctx_unbind static helper in x509-support.h -- is
+# dropped, same as if it were blacklisted.
+whitelist:
+- d2i_X509
+- X509_free
+- X509_STORE_new
+- X509_STORE_add_cert
+- X509_STORE_free
+- X509_STORE_CTX_new
+- X509_verify_cert
+- X509_STORE_CTX_get_error
+- x509_fuzz_ctx_init
+- x509_fuzz_ctx_cleanup
+- x509_fuzz_ctx_free

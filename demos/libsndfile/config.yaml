@@ -1,0 +1,28 @@
+# Opt-in whitelist: exactly the API surface Traffic's
+# examples/libsndfile/libsndfile.tf targets -- sf_init_file, sf_fuzz_readf_int,
+# sf_fuzz_writef_int, sf_fuzz_readf_double, sf_fuzz_writef_double,
+# sf_fuzz_get_chunk_iterator, sf_fuzz_get_chunk_data (sndfile-support.h), and
+# sf_error, sf_strerror, sf_error_number, sf_close, sf_version_string,
+# sf_format_check, sf_current_byterate, sf_seek, sf_get_chunk_iterator,
+# sf_next_chunk_iterator, sf_get_chunk_size (sndfile.h). Everything else --
+# including the sf_fuzz_samples/vf* internal VIO-callback helpers in
+# sndfile-support.h -- is dropped, same as if it were blacklisted.
+whitelist:
+- sf_init_file
+- sf_fuzz_readf_int
+- sf_fuzz_writef_int
+- sf_fuzz_readf_double
+- sf_fuzz_writef_double
+- sf_fuzz_get_chunk_iterator
+- sf_fuzz_get_chunk_data
+- sf_error
+- sf_strerror
+- sf_error_number
+- sf_close
+- sf_version_string
+- sf_format_check
+- sf_current_byterate
+- sf_seek
+- sf_get_chunk_iterator
+- sf_next_chunk_iterator
+- sf_get_chunk_size

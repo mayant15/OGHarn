@@ -1,13 +1,17 @@
-blacklist:
-- sqlite3_mprintf
-- sqlite3_vmprintf
-- sqlite3_snprintf
-- sqlite3_vsnprintf
-- sqlite3_open16
-- sqlite3_open_v2
+# Opt-in whitelist: exactly the API surface Traffic's
+# examples/sqlite3/sqlite3.tf targets. Everything else declared in
+# sqlite3.h is dropped, same as if it were blacklisted.
+whitelist:
+- sqlite3_open
+- sqlite3_close
+- sqlite3_limit
+- sqlite3_prepare_v2
+- sqlite3_finalize
+- sqlite3_step
+- sqlite3_reset
 
-preamble_seq: 
-  - sqlite3_open 
+preamble_seq:
+- sqlite3_open
 
 arg_keys:
   sqlite3_open:
