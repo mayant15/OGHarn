@@ -6,8 +6,10 @@ CXXFLAGS_ASAN	= -fsanitize=address,undefined
 LIB_NAME = lib
 LIB_REPO = https://github.com/glennrp/libpng.git
 LIB_COMMIT = a37d4836519517bdce6cb9d956092321eca3e73b
+SUPPORT_HDR = png-support.h
 
 DEPS = -I $(PWD)/$(LIB_NAME)/ \
+	   -I $(PWD) \
 	   -L $(PWD)/$(LIB_NAME)/.libs/
 
 DEPS_DYN = -lpng16
@@ -36,7 +38,8 @@ lib_plain: # Plain build for indexing with multiplier
 	autoreconf -vfi && \
 	./configure \
 		CC=$(CC) CXX=$(CXX) && \
-	bear -- make all -j12
+	bear -- make all -j12 && \
+	bear --append -- $(CC) -I $(PWD)/$(LIB_NAME)_plain -I $(PWD) -x c -c -o /dev/null $(PWD)/$(SUPPORT_HDR)
 
 lib_fuzz: # build for fuzzing. Static linking with afl instrumentation
 	rm -rf $(LIB_NAME)_fuzz

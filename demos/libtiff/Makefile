@@ -6,8 +6,10 @@ CXXFLAGS_ASAN	= -fsanitize=address,undefined
 LIB_NAME = lib
 LIB_REPO = https://gitlab.com/libtiff/libtiff.git
 LIB_COMMIT = c145a6c14978f73bb484c955eb9f84203efcb12e
+SUPPORT_HDR = tiff-support.h
 
 DEPS = -I $(PWD)/$(LIB_NAME)/libtiff/ \
+	   -I $(PWD) \
 	   -L $(PWD)/$(LIB_NAME)/libtiff/.libs/
 
 DEPS_DYN = -ltiff
@@ -36,7 +38,8 @@ lib_plain: # Plain build for indexing with multiplier
 	autoreconf -vfi && \
 	./configure \
 		CC=$(CC) CXX=$(CXX) && \
-	bear -- make all -j12
+	bear -- make all -j12 && \
+	bear --append -- $(CC) -I $(PWD)/$(LIB_NAME)_plain/libtiff -I $(PWD) -x c -c -o /dev/null $(PWD)/$(SUPPORT_HDR)
 
 lib_fuzz: # build for fuzzing. Static linking with afl instrumentation
 	rm -rf $(LIB_NAME)_fuzz

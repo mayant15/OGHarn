@@ -6,8 +6,10 @@ CXXFLAGS_ASAN	= -fsanitize=address,undefined
 LIB_NAME = lib
 LIB_REPO = https://github.com/libsndfile/libsndfile.git
 LIB_COMMIT = 86c9f9eb7022d186ad4d0689487e7d4f04ce2b29
+SUPPORT_HDR = sndfile-support.h
 
 DEPS = -I $(PWD)/$(LIB_NAME)/include \
+	   -I $(PWD) \
 	   -L $(PWD)/$(LIB_NAME)/src/.libs/
 
 DEPS_DYN = -lsndfile
@@ -38,7 +40,8 @@ lib_plain: # Plain build for indexing with multiplier
 	autoreconf -vfi && \
 	./configure \
 		CC=$(CC) CXX=$(CXX) && \
-	bear -- make all -j12
+	bear -- make all -j12 && \
+	bear --append -- $(CC) -I $(PWD)/$(LIB_NAME)_plain/include -I $(PWD) -x c -c -o /dev/null $(PWD)/$(SUPPORT_HDR)
 
 lib_fuzz: # build for fuzzing. Static linking with afl instrumentation. MPEG disabled
 	# due to libmpg123.a not being available on Ubuntu.
