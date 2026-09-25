@@ -16,11 +16,18 @@
  * assistance (Claude Code), after review: the get0 accessors dereference ctx,
  * so the wrappers crashed on a NULL ctx that X509_STORE_CTX_init rejects, and
  * init leaked the references it had just taken.
+ *
+ * x509_fuzz_d2i_X509 added with AI assistance (Claude Code): d2i_X509 takes
+ * its input as a cursor (const unsigned char **) that it advances, so callers
+ * must first materialize an addressable copy of the buffer pointer. The
+ * wrapper takes the buffer by value and reports the advanced cursor through a
+ * separate out parameter.
  */
 
 #ifndef X509_SUPPORT_H
 #define X509_SUPPORT_H
 
+#include <stdint.h>
 #include <openssl/x509.h>
 #include <openssl/x509_vfy.h>
 
@@ -67,6 +74,21 @@ void x509_fuzz_ctx_free(X509_STORE_CTX *ctx) {
   if (ctx != NULL)
     x509_fuzz_ctx_unbind(ctx);
   X509_STORE_CTX_free(ctx);
+}
+
+/* d2i_X509 with the in/out cursor split into a by-value input and a separate
+   output. Parses a single X509 from data[0..len) and returns it, or NULL on
+   error. On success *end (if end is non-NULL) is set to one past the last byte
+   consumed; on failure *end is set to data, matching d2i_X509 leaving its
+   cursor unadvanced. The d2i "a" parameter is always NULL, so a fresh X509 is
+   always allocated. */
+X509 *x509_fuzz_d2i_X509(const uint8_t *data, long len, const uint8_t **end) {
+  const uint8_t *cursor = data;
+  X509 *x509 = d2i_X509(NULL, &cursor, len);
+
+  if (end != NULL)
+    *end = x509 != NULL ? cursor : data;
+  return x509;
 }
 
 #endif
