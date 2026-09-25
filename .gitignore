@@ -3,7 +3,7 @@
 **/.DS_Store
 /demos/*/bin
 /demos/*/mx*
-/demos/*/out
+/demos/*/out*
 /demos/*/seeds_validcp
 /demos/*/seeds_invalidcp
 /extras/AFLplusplus
