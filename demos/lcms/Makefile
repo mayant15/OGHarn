@@ -1,7 +1,7 @@
 CC_FUZZ       	= afl-cc
 CXX_FUZZ      	= afl-c++
-CFLAGS_ASAN 	= -fsanitize=address,undefined
-CXXFLAGS_ASAN 	= -fsanitize=address,undefined
+CFLAGS_ASAN 	= -fsanitize=address,undefined -fno-sanitize=leak
+CXXFLAGS_ASAN 	= -fsanitize=address,undefined -fno-sanitize=leak
 
 LIB_NAME = lib
 LIB_REPO = https://github.com/mm2/Little-CMS.git

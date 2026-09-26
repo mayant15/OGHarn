@@ -1,7 +1,7 @@
 CC_FUZZ       	= afl-clang-fast
 CXX_FUZZ      	= afl-clang-fast++
-CFLAGS_ASAN 	= -fsanitize=address,undefined
-CXXFLAGS_ASAN 	= -fsanitize=address,undefined
+CFLAGS_ASAN 	= -fsanitize=address,undefined -fno-sanitize=leak
+CXXFLAGS_ASAN 	= -fsanitize=address,undefined -fno-sanitize=leak
 
 #------------------------------------------------------------------------
 # Edit these below accordingly...

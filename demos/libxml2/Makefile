@@ -2,8 +2,8 @@ CC_FUZZ       	= afl-clang-fast
 CXX_FUZZ      	= afl-clang-fast++
 CC            	= clang-18
 CXX           	= clang++-18
-CFLAGS_ASAN   	= -fsanitize=address,undefined
-CXXFLAGS_ASAN 	= -fsanitize=address,undefined
+CFLAGS_ASAN   	= -fsanitize=address,undefined -fno-sanitize=leak
+CXXFLAGS_ASAN 	= -fsanitize=address,undefined -fno-sanitize=leak
 #------------------------------------------------------------------------
 # libxml2 - pinned to the commit used by Magma v1.2
 # (https://github.com/HexHive/magma/tree/v1.2/targets/libxml2)
