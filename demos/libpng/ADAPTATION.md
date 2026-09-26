@@ -1,5 +1,14 @@
 # Adapting `png-support.h` for OGHarn
 
+> **AI disclosure:** This document, the accompanying `png-support.h` change,
+> and the investigation behind both were produced by Claude (Anthropic),
+> operating this repository's Docker-based OGHarn pipeline end-to-end
+> (building libpng, indexing with Multiplier, running and re-running
+> `ogharn.py`) and reading OGHarn's own source (`src/engine.py`) to trace
+> the root cause. The metrics and log excerpts below are taken directly
+> from those runs; the analysis and conclusions have not been independently
+> reviewed by a human at time of writing.
+
 ## Problem
 
 Running `run_ogharn.sh` against the stock `png-support.h` produced **zero**
