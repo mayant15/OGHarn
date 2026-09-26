@@ -1,20 +1,21 @@
 # Adapting OGHarn's demo benchmarks
 
-Records support-header fixes made to get OGHarn producing meaningful
-harnesses for `demos/` benchmarks, the OGHarn bugs that made each fix
-necessary, and a survey of harness-generation results across all libraries
-in `demos/run.sh`.
+Records support-header and Makefile fixes made to get OGHarn producing
+meaningful harnesses for `demos/` benchmarks, the bugs (in OGHarn itself,
+and in one demo's build configuration) that made each fix necessary, and a
+survey of harness-generation results across all libraries in
+`demos/run.sh`.
 
-> **AI disclosure:** This document, the accompanying support-header changes
+> **AI disclosure:** This document, the accompanying fixes
 > (`demos/libpng/png-support.h`, `demos/libtiff/tiff-support.h`,
-> `demos/libsndfile/sndfile-support.h`), and the investigation behind both
-> were produced by Claude (Anthropic), operating this repository's
-> Docker-based OGHarn pipeline end-to-end (building each library, indexing
-> with Multiplier, running and re-running `ogharn.py`) and reading OGHarn's
-> own source (`src/engine.py`) to trace each root cause. The metrics and log
-> excerpts below are taken directly from those runs; the analysis and
-> conclusions have not been independently reviewed by a human at time of
-> writing.
+> `demos/libsndfile/sndfile-support.h`, `demos/sqlite/Makefile`), and the
+> investigation behind all of them were produced by Claude (Anthropic),
+> operating this repository's Docker-based OGHarn pipeline end-to-end
+> (building each library, indexing with Multiplier, running and re-running
+> `ogharn.py`) and reading OGHarn's own source (`src/engine.py`) to trace
+> each root cause. The metrics and log excerpts below are taken directly
+> from those runs; the analysis and conclusions have not been independently
+> reviewed by a human at time of writing.
 
 ## `demos/libpng/png-support.h`: anonymous-struct dependency gap
 
@@ -261,6 +262,84 @@ Neither library's remaining unsuccessfully-harnessed functions
 error-reporting functions) are related to this bug — they look like
 separate dependency-chaining gaps, not investigated further here.
 
+## `demos/sqlite`: harness fuzzes the wrong library entirely
+
+The initial survey run for sqlite (below) produced zero final harnesses and
+a suspicious symptom: `Total Edges` in `log_stats` plateaued at **3** for
+the entire ~10-minute campaign, across hundreds of candidate harnesses and
+every seed file. That's far too low even for `sqlite3_prepare_v2` alone
+parsing arbitrary bytes — real, varied SQL text (the seed corpus has
+multi-statement `CREATE TABLE`/`INSERT`/`SELECT` scripts) should hit many
+different tokenizer/parser branches. `sqlite3_step`/`sqlite3_finalize`/
+`sqlite3_reset`/`sqlite3_close` were never harnessed.
+
+**Root cause, confirmed empirically, not just by inspection:** extracted
+one of OGHarn's own generated setup-routine harnesses
+(`sqlite3_open(":memory:", &db); sqlite3_prepare_v2(db, fuzzData, size, ...)`),
+compiled it against `demos/sqlite/lib/` exactly as `make harness`/`make
+showmap` do, and ran `afl-showmap` against it directly:
+
+```
+$ LD_LIBRARY_PATH=demos/sqlite/lib/ ldd gen_harness.out | grep sqlite
+    libsqlite3.so.0 => /lib/x86_64-linux-gnu/libsqlite3.so.0   <-- NOT our build!
+```
+
+Every seed — rich valid SQL, single-character garbage, hex-dump nonsense —
+produced the *exact same* 2-tuple coverage hash. The harness was never
+executing the fuzzing build's `libsqlite3.so` at all.
+
+Why: sqlite's own (non-libtool) build embeds `SONAME libsqlite3.so.0` into
+the shared object it produces, but the produced *file* is named plainly
+`libsqlite3.so` — normally `make install` (or `ldconfig`) creates the
+`libsqlite3.so.0` symlink the SONAME promises; the demo's `lib:` target
+only runs `make all`, so that symlink never gets created. At runtime, the
+dynamic loader resolves the harness's `NEEDED libsqlite3.so.0` entry by
+filename, not by scanning `LD_LIBRARY_PATH` for something whose *SONAME*
+happens to match — since no file named exactly `libsqlite3.so.0` exists in
+`demos/sqlite/lib/`, it falls through to the system default paths, where
+this container's base image happens to have `libsqlite3-0` installed (as
+some other package's dependency) — completely uninstrumented, and not even
+the same version. So every harness OGHarn generates for sqlite silently
+fuzzes a random system library instead of the one it just spent an index
+and a build understanding, and gets zero real coverage feedback back.
+
+**Fix:** added `ln -sf libsqlite3.so libsqlite3.so.0` to the end of the
+`lib:` target in `demos/sqlite/Makefile`, so `DEPS_LDD` contains a file
+under the exact name the loader looks for.
+
+**Verification.** Rebuilding `lib` isn't required for this fix (`lib_plain`
+and the `.db` are untouched by it) — just created the symlink and reran
+`ogharn.py` with the same arguments:
+
+```
+$ LD_LIBRARY_PATH=demos/sqlite/lib/ afl-showmap -- gen_harness.out seeds_valid/s5   # rich SQL
+Captured 2058 tuples ...
+$ LD_LIBRARY_PATH=demos/sqlite/lib/ afl-showmap -- gen_harness.out seeds_invalid/s4  # a single quote char
+Captured 469 tuples ...
+```
+
+| | Before | After |
+|---|---|---|
+| Coverage hash across all seeds | Identical for every seed | Genuinely differs (2058 vs ~470-480 tuples) |
+| Final harnesses | 0 | **6** |
+| Max coverage (edges) | 3 | **3324** |
+| Functions harnessed | 2/7 (`sqlite3_open`, `sqlite3_prepare_v2`) | **6/7** (adds `sqlite3_step`, `sqlite3_finalize`, `sqlite3_reset`, `sqlite3_close`) |
+
+`sqlite3_limit` remains unharnessed — not investigated, but it doesn't
+depend on the `sqlite3_stmt*` chain at all (it's a `sqlite3*`-level config
+knob), so it's unrelated to this bug.
+
+This is a Makefile/build-configuration bug specific to how this one demo
+packages its library (the only demo whose target library isn't built via
+GNU Autotools + libtool, which normally handles SONAME symlinks
+automatically) — not an OGHarn source bug like the two above. Worth
+flagging for anyone adding a new demo for a library with its own bespoke
+(non-libtool) build system: **always verify with `ldd` that the compiled
+harness actually links the freshly-built library, not a same-named system
+package** — a mismatch here produces no error or crash, just silent,
+totally flat coverage that looks like "the search isn't finding anything
+interesting" rather than "the search is fuzzing the wrong binary."
+
 ## Survey: does every library in `demos/run.sh` produce meaningful harnesses?
 
 Prompted by the fixes above, ran `ogharn.py` (same arguments each demo's
@@ -275,9 +354,9 @@ libpng versus widespread.
 | **libxml2** | 15 | 1996 | 11/27 | Reaches real `xmlCtxtReadMemory`/`xmlNewTextReader` parsing |
 | **libtiff** | 4 (was 0) | 553 (was 0) | 5/8 | Fixed by the `uint8_t` → `char*` change above |
 | **libsndfile** | 9 (was 0) | 388 (was 0) | 7/18 | Fixed by the `uint8_t` → `char*` change above |
-| **sqlite** | 0 | 0 | 2/7 (`sqlite3_open`, `sqlite3_prepare_v2` only) | `sqlite3_step`/`sqlite3_finalize`/`sqlite3_reset`/`sqlite3_close` never harnessed — looks like a separate dependency-chaining gap (the `sqlite3_stmt*` handle `sqlite3_prepare_v2` produces doesn't get threaded into the later calls), not investigated further here |
+| **sqlite** | 6 (was 0) | 3324 (was 3) | 6/7 | Fixed by the `libsqlite3.so.0` symlink above — the real bug wasn't in the search at all, it was fuzzing an uninstrumented system library the whole time |
 
-3 of the 6 (lua, openssl, libxml2) already worked without any changes. 2 of
-the remaining 3 (libtiff, libsndfile) were fixed by the `uint8_t`-typedef
-workaround documented above. sqlite's failure is a distinct, unexplored
-issue.
+3 of the 6 (lua, openssl, libxml2) already worked without any changes. The
+remaining 3 (libtiff, libsndfile, sqlite) each hit a different bug — two in
+OGHarn's type resolution, one in this demo's build configuration — and all
+three are now fixed and verified above.
