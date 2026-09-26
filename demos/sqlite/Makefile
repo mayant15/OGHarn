@@ -36,7 +36,17 @@ lib: # build for harness generation. Dynamic linking, asan, and afl instrumentat
 	CC=$(CC_FUZZ) CXX=$(CXX_FUZZ) \
 	CFLAGS="-DSQLITE_ENABLE_API_ARMOR" \
 	CXXFLAGS="-DSQLITE_ENABLE_API_ARMOR" && \
-	make all -j12
+	make all -j12 && \
+	ln -sf libsqlite3.so libsqlite3.so.0
+	# sqlite's own (non-libtool) build sets SONAME "libsqlite3.so.0" on the
+	# built libsqlite3.so but doesn't create a file/symlink with that exact
+	# name -- normally `make install` or ldconfig would. Without it, the
+	# harness's runtime NEEDED entry ("libsqlite3.so.0") never matches
+	# anything in DEPS_LDD, so the dynamic loader silently falls back to
+	# whatever uninstrumented libsqlite3.so.0 the base OS image happens to
+	# have installed, and every harness fuzzes that instead -- with zero
+	# coverage feedback from the actual instrumented build. See
+	# ADAPTATION.md.
 
 lib_plain: # build for harness generation. Dynamic linking, asan, and afl instrumentation
 	rm -rf $(LIB_NAME)_plain
