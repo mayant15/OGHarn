@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+cd demos/
+
 run_project() {
   DEMO="$1"
   shift
