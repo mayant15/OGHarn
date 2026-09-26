@@ -162,3 +162,60 @@ spellings) should spell wrapper return/parameter types **using the exact
 typedef name the target library's own API uses**, not a structurally
 equivalent alternative — otherwise OGHarn's dependency inference may not
 connect them, silently degrading harness quality without any error message.
+
+## Related bug found later: fixed-width integer typedefs break fuzz-argument detection entirely
+
+While checking the other libraries in `demos/run.sh` (`libtiff`, `libsndfile`,
+`libxml2`, `lua`, `openssl`, `sqlite`) for whether OGHarn could produce
+meaningful harnesses for them, `libtiff` and `libsndfile` both came back with
+**zero** final harnesses and a much worse symptom than libpng's original
+one: OGHarn never found `tiff_open_r`/`sf_init_file` — their support headers'
+own primary "hand the fuzz buffer to the library" entry points — as a search
+entry point *at all*. This is a second, independent gap in the same family
+of problems (OGHarn's type-compatibility machinery not fully resolving
+typedef chains), worth recording here since anyone adapting a support header
+for a new library is likely to hit it.
+
+**Root cause:** both wrappers declared their buffer parameter as
+`const uint8_t *data`. On glibc, `uint8_t` resolves through **two** typedef
+hops: `uint8_t -> __uint8_t -> unsigned char` (`/usr/include/x86_64-linux-gnu/bits/types.h:38`).
+OGHarn's fuzz-argument detection (`CheckCompatibility.init_mult_type`,
+`src/engine.py:498-523`) only recurses **one** typedef level when deciding
+whether a pointer type "consumes" fuzz data: it checks whether the
+one-level-down type's name is in `self.buffer_types`, or whether that
+one-level-down type's *own* `consumes_fuzz` flag is already set. For
+`uint8_t*`, one level down lands on `__uint8_t` — a name in nobody's list —
+and `__uint8_t`'s own resolution never sets `consumes_fuzz` either, because
+that check is additionally gated on `mult_type_obj.pointers`, which is `0`
+at the `__uint8_t` level (the pointer was only ever counted once, on the
+outermost `uint8_t*`). `uint8_t` also isn't in `extras/mult-to-c-types.txt`,
+so it doesn't qualify for the auxiliary-function fallback either. Net
+effect: the whole argument is invisible to OGHarn, and the function falls
+through into "Processing Functions" — never tried as a way to get fuzz data
+into the library — with no error or warning. Confirmed directly in
+`demos/libtiff/out/debug-info/log_multiplier.txt` and
+`demos/libsndfile/out/debug-info/log_multiplier.txt`: both entry points are
+listed under "Processing Functions", not "Setup Functions".
+
+**Why the libpng fix's pattern doesn't apply here:** this isn't a spelling
+mismatch between two typedef names for the same type (the earlier bug) — no
+respelling of `uint8_t` fixes it, since *every* spelling of that type
+resolves through the same two-hop chain. The fix instead is to avoid
+fixed-width `stdint.h` types in support-header signatures entirely and use
+`char *` (a plain `BuiltinType`, no typedef indirection, so the one-level
+check never comes into play): applied to `tiff_open_r`, `tiff_fuzz_write_strip`
+(`demos/libtiff/tiff-support.h`) and `sf_init_file`
+(`demos/libsndfile/sndfile-support.h`). This only works because none of the
+*real* library API functions in either whitelist take a `uint8_t*`/similar
+argument themselves — `TIFFClose`, `TIFFSetField`, `TIFFWriteDirectory`,
+and all of libsndfile's whitelisted functions use `TIFF*`/`SNDFILE*`/plain
+`int`/`char*` types instead. `tiffio.h` does use `uint8_t*`/`uint16_t*`/
+`uint32_t*`/`uint64_t*` extensively elsewhere (unwhitelisted raster/strip
+functions); if the whitelist ever grows to include one of those, this bug
+resurfaces and can't be routed around by respelling, since we can't change
+the library's own declaration.
+
+This is a general OGHarn limitation, not a libpng-specific note — flagged
+here because it's the same family of "type resolution silently gives up and
+misclassifies a function" failure this document's main fix addresses, just
+one typedef-hop deeper.

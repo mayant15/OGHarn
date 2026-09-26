@@ -99,10 +99,19 @@ static sf_count_t vftell (void *user_data)
   return vf->offset ;
 }
 
-int sf_init_file(const uint8_t *data, 
-                size_t size, 
-                SNDFILE **sndfile, 
-                VIO_DATA *vio_data, 
+// `data` is spelled `const char *`, not `const uint8_t *`: glibc resolves
+// uint8_t through two typedef hops (uint8_t -> __uint8_t -> unsigned
+// char), and OGHarn's fuzz-buffer-argument detection only recurses one
+// typedef level when deciding whether a pointer type "consumes" fuzz
+// data, so a `uint8_t *` parameter here never registers as fuzz-
+// compatible and sf_init_file never becomes a search entry point (it
+// silently falls into "Processing Functions" instead of "Setup
+// Functions"). `char` is a plain builtin with no typedef indirection, so
+// it doesn't hit this gap. See demos/OGHARN-BUGS.md.
+int sf_init_file(const char *data,
+                size_t size,
+                SNDFILE **sndfile,
+                VIO_DATA *vio_data,
                 SF_VIRTUAL_IO *vio, SF_INFO *sndfile_info)
 {
    // Initialize the virtual IO structure.
@@ -113,7 +122,7 @@ int sf_init_file(const uint8_t *data,
    vio->tell = vftell ;
 
    // Initialize the VIO user data.
-   vio_data->data = data ;
+   vio_data->data = (const unsigned char *)data ;
    vio_data->length = size ;
    vio_data->offset = 0 ;
 
