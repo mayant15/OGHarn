@@ -1,15 +1,24 @@
-# Adapting `png-support.h` for OGHarn
+# Adapting OGHarn's demo benchmarks
 
-> **AI disclosure:** This document, the accompanying `png-support.h` change,
-> and the investigation behind both were produced by Claude (Anthropic),
-> operating this repository's Docker-based OGHarn pipeline end-to-end
-> (building libpng, indexing with Multiplier, running and re-running
-> `ogharn.py`) and reading OGHarn's own source (`src/engine.py`) to trace
-> the root cause. The metrics and log excerpts below are taken directly
-> from those runs; the analysis and conclusions have not been independently
-> reviewed by a human at time of writing.
+Records support-header fixes made to get OGHarn producing meaningful
+harnesses for `demos/` benchmarks, the OGHarn bugs that made each fix
+necessary, and a survey of harness-generation results across all libraries
+in `demos/run.sh`.
 
-## Problem
+> **AI disclosure:** This document, the accompanying support-header changes
+> (`demos/libpng/png-support.h`, `demos/libtiff/tiff-support.h`,
+> `demos/libsndfile/sndfile-support.h`), and the investigation behind both
+> were produced by Claude (Anthropic), operating this repository's
+> Docker-based OGHarn pipeline end-to-end (building each library, indexing
+> with Multiplier, running and re-running `ogharn.py`) and reading OGHarn's
+> own source (`src/engine.py`) to trace each root cause. The metrics and log
+> excerpts below are taken directly from those runs; the analysis and
+> conclusions have not been independently reviewed by a human at time of
+> writing.
+
+## `demos/libpng/png-support.h`: anonymous-struct dependency gap
+
+### Problem
 
 Running `run_ogharn.sh` against the stock `png-support.h` produced **zero**
 final harnesses. OGHarn's search exhaustively tried every combination of the
@@ -21,10 +30,10 @@ argument. libpng's internal `version` check rejects that immediately, so
 coverage plateaued at 7 edges and no harness ever reached real PNG parsing
 code.
 
-## Root cause
+### Root cause
 
 libpng declares `png_image` as an **anonymous struct aliased to two typedef
-names at once** (`lib_plain/png.h:2672-2708`):
+names at once** (`demos/libpng/lib_plain/png.h:2672-2708`):
 
 ```c
 typedef struct
@@ -36,7 +45,7 @@ typedef struct
 The original `png-support.h` wrote `png_fuzz_new_image`'s return type as
 `png_image *`, while libpng's own `png_image_begin_read_from_memory`,
 `png_image_finish_read`, and `png_image_free` all take a `png_imagep`
-argument (`lib_plain/png.h:2991,2995,3030`). Structurally these are the same
+argument (`demos/libpng/lib_plain/png.h:2991,2995,3030`). Structurally these are the same
 type; textually they are two different typedef names.
 
 OGHarn's dependency inference (`src/engine.py`, `BuildDependencies` /
@@ -65,12 +74,12 @@ value satisfies `png_image_begin_read_from_memory`'s argument 0," because
 the only path connecting `png_image *` and `png_imagep` runs through that
 blocked anonymous-struct match.
 
-Verified in `out/debug-info/log_potential_dependencies.txt` from the
+Verified in `demos/libpng/out/debug-info/log_potential_dependencies.txt` from the
 original (broken) run: `png_fuzz_new_image` only appears with a dependency
 to `png_fuzz_free_image` (its own header — same typedef spelling on both
 sides), never to any `png_image_*` function from `png.h`.
 
-## Fix
+### Fix
 
 Changed `png_fuzz_new_image`/`png_fuzz_free_image` in `png-support.h` to use
 the same `png_imagep` spelling libpng's own declarations use, instead of the
@@ -94,7 +103,7 @@ struct" from "these are two unrelated anonymous structs" — e.g. comparing
 the underlying `RecordDecl`'s identity/location instead of its (possibly
 empty) name.
 
-## Verification
+### Verification
 
 Rebuilt `lib_plain`'s `compile_commands.json` entry for the header, re-ran
 `mx-index`, and reran `ogharn.py` with the same arguments as
@@ -118,7 +127,7 @@ Function Name: png_image_finish_read,Current Function's Argument #: 0, Other Fun
 Function Name: png_image_free,Current Function's Argument #: 0, Other Function's Argument #: -1, ..., Dependency Code: 2
 ```
 
-The best final harness (`out_fixed/final-harnesses/src/harness1:486-new-tuples.c`)
+The best final harness (`demos/libpng/out_fixed/final-harnesses/src/harness1:486-new-tuples.c`)
 correctly chains the initializer into the real API call:
 
 ```c
@@ -131,10 +140,10 @@ Running `harness1.out` directly against a valid seed confirms it reaches
 real libpng code (not just the wrapper): LeakSanitizer reports the
 `png_image_control` struct allocated inside `png_image_begin_read_from_memory`
 as leaked, plus the `png_image` allocated by `png_fuzz_new_image` itself
-(`png-support.h:41`) — expected, since this minimal harness only calls
+(`demos/libpng/png-support.h:41`) — expected, since this minimal harness only calls
 `png_image_begin_read_from_memory` and never reaches `png_fuzz_free_image`.
 
-## Caveat: the observed "crashes" are likely harness artifacts, not libpng bugs
+### Caveat: the observed "crashes" are likely harness artifacts, not libpng bugs
 
 The fixed run also logged 30 discarded candidates that aborted with
 `SIGABRT` (consistently on the `not_kitty_icc.png` seed). Inspecting one:
@@ -154,7 +163,7 @@ the very struct `png_image_begin_read_from_memory` just populated") rather
 than a genuine libpng memory-safety bug. Not investigated further here;
 flagging it so it isn't mistaken for a confirmed finding.
 
-## Generalization
+### Generalization
 
 Any Traffic/OGHarn support header for a library that exposes a type via
 `typedef struct { ... } Name, *NameP;` (anonymous struct, multiple typedef
@@ -163,7 +172,7 @@ typedef name the target library's own API uses**, not a structurally
 equivalent alternative — otherwise OGHarn's dependency inference may not
 connect them, silently degrading harness quality without any error message.
 
-## Related bug found later: fixed-width integer typedefs break fuzz-argument detection entirely
+## `demos/libtiff` / `demos/libsndfile`: fixed-width integer typedefs break fuzz-argument detection
 
 While checking the other libraries in `demos/run.sh` (`libtiff`, `libsndfile`,
 `libxml2`, `lua`, `openssl`, `sqlite`) for whether OGHarn could produce
