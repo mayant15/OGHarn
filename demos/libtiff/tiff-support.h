@@ -90,8 +90,19 @@ static toff_t tiff_src_size(thandle_t handle) {
 
 /* Opens the fuzzed buffer for reading. Mode "r" makes libtiff read the
    first directory before returning, so a non-NULL result also means the
-   first directory parsed successfully. */
-TIFF *tiff_open_r(const uint8_t *data, int size) {
+   first directory parsed successfully.
+
+   Parameter is spelled `const char *`, not `const uint8_t *`: glibc
+   resolves uint8_t through two typedef hops (uint8_t -> __uint8_t ->
+   unsigned char), and OGHarn's fuzz-buffer-argument detection
+   (CheckCompatibility.init_mult_type in src/engine.py) only recurses one
+   typedef level when deciding whether a pointer type "consumes" fuzz
+   data. One hop lands on __uint8_t, which is in nobody's type list, so
+   tiff_open_r never registered as fuzz-compatible and got dropped into
+   "Processing Functions" instead of "Setup Functions" -- OGHarn had no
+   entry point into the library at all. `char` is a plain builtin (no
+   typedef indirection), so it doesn't hit this gap. See OGHARN-BUGS.md. */
+TIFF *tiff_open_r(const char *data, int size) {
   tiff_mem_src_t *in;
   TIFF *tif;
 
@@ -100,7 +111,7 @@ TIFF *tiff_open_r(const uint8_t *data, int size) {
   in = (tiff_mem_src_t *)malloc(sizeof(*in));
   if (in == NULL)
     return NULL;
-  in->data = data;
+  in->data = (const uint8_t *)data;
   in->size = (size_t)size;
   in->offset = 0;
 
@@ -279,7 +290,7 @@ static int tiff_fuzz_read_rgba(TIFF *tif) {
    content drawn from the same fuzzed bytes the input TIFF was opened
    from (repeated/truncated to fit), rather than a constant buffer, so
    the compressor sees adversarial content instead of an all-zero strip. */
-static int tiff_fuzz_write_strip(TIFF *tif, const uint8_t *data, int size) {
+static int tiff_fuzz_write_strip(TIFF *tif, const char *data, int size) {
   tmsize_t strip_size = TIFFStripSize(tif);
   uint8_t *buf;
   tmsize_t i;
@@ -292,7 +303,7 @@ static int tiff_fuzz_write_strip(TIFF *tif, const uint8_t *data, int size) {
     return -1;
   if (size > 0) {
     for (i = 0; i < strip_size; i++)
-      buf[i] = data[i % (tmsize_t)size];
+      buf[i] = (uint8_t)data[i % (tmsize_t)size];
   } else {
     memset(buf, 0, (size_t)strip_size);
   }

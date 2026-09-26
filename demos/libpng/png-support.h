@@ -14,8 +14,18 @@
    literals and no way to write individual fields, so this is the "small
    C initializer" libpng.tf's header comment calls out -- it does the
    zeroing/version-stamping libpng.tf itself has no way to express, in
-   place of the `fresh` intrinsic's uninitialized stack memory. */
-png_image *png_fuzz_new_image(void) {
+   place of the `fresh` intrinsic's uninitialized stack memory.
+
+   Return type is spelled `png_imagep` -- the exact typedef name
+   png_image_begin_read_from_memory/png_image_finish_read/png_image_free
+   use in png.h -- rather than the structurally-identical `png_image *`.
+   png_image is declared as an anonymous struct aliased to both `png_image`
+   and `png_imagep` (`typedef struct { ... } png_image, *png_imagep;`), and
+   OGHarn's dependency inference (Multiplier's `RecordDecl.name` on an
+   anonymous struct resolves to "") can't always bridge the two spellings
+   back to the same underlying type -- see ADAPTATION.md. Matching the
+   library's own spelling sidesteps that gap entirely. */
+png_imagep png_fuzz_new_image(void) {
   /* png_access_version_number is a real, side-effect-free libpng export
      (it just returns the compiled PNG_LIBPNG_VER constant) -- calling it
      gives Traffic's coverage-guided search an actual libpng code path to
@@ -28,7 +38,7 @@ png_image *png_fuzz_new_image(void) {
      search build up to png_image_begin_read_from_memory. */
   (void)png_access_version_number();
 
-  png_image *image = (png_image *)malloc(sizeof(png_image));
+  png_imagep image = (png_imagep)malloc(sizeof(*image));
   if (image == NULL)
     return NULL;
   memset(image, 0, sizeof(*image));
@@ -46,7 +56,7 @@ png_image *png_fuzz_new_image(void) {
    nulls opaque out after freeing it, so it is also safe to call again on
    an image some other path already tore down) and then frees the struct
    png_fuzz_new_image malloc'd, so no fuzz iteration leaks it. */
-void png_fuzz_free_image(png_image *image) {
+void png_fuzz_free_image(png_imagep image) {
   png_image_free(image);
   free(image);
 }

@@ -6,6 +6,8 @@
 /demos/*/out*
 /demos/*/seeds_validcp
 /demos/*/seeds_invalidcp
+/demos/*/_mirror
+/demos/*/_build_*.log
 /extras/AFLplusplus
 /extras/llvm.sh
 /extras/multiplier
