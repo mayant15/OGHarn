@@ -219,3 +219,35 @@ This is a general OGHarn limitation, not a libpng-specific note — flagged
 here because it's the same family of "type resolution silently gives up and
 misclassifies a function" failure this document's main fix addresses, just
 one typedef-hop deeper.
+
+**Verification.** Re-ran `mx-index` after the header edits (function counts
+unchanged: 9539 for libtiff, 3814 for libsndfile — confirming the fix didn't
+perturb indexing), then reran `ogharn.py` with the same arguments
+`demos/run.sh` uses for each:
+
+| | libtiff (before → after) | libsndfile (before → after) |
+|---|---|---|
+| `tiff_open_r`/`sf_init_file` classified as | Processing → **Setup** | Processing → **Setup** |
+| Final harnesses | 0 → **4** | 0 → **9** |
+| Max coverage (edges) | 0 → **553** | 0 → **388** |
+| Functions harnessed | 0/8 → **5/8** | 3/18 → **7/18** |
+
+`log_multiplier.txt` now shows both entry points correctly resolved to
+`CHARACTER_S*` (i.e. `char*`) and listed under "Setup Functions" rather than
+"Processing Functions":
+
+```
+Setup Functions:
+TIFF* tiff_open_r(['CHARACTER_S*', 'INT'])Status Check(operator: !, value: None)
+INT tiff_fuzz_write_strip(['TIFF*', 'CHARACTER_S*', 'INT'])Status Check(operator: <, value: 0)
+```
+```
+Setup Functions:
+INT sf_init_file(['CHARACTER_S*', 'size_t', 'SNDFILE**', 'VIO_DATA*', 'SF_VIRTUAL_IO*', 'SF_INFO*'])Status Check(operator: <, value: 0)
+SF_CHUNK_ITERATOR* sf_fuzz_get_chunk_iterator(['SNDFILE*', 'CHARACTER_S*'])Status Check(operator: !, value: None)
+```
+
+Neither library's remaining unsuccessfully-harnessed functions
+(`TIFFSetField`/`TIFFWriteDirectory`; most of libsndfile's chunk-iterator and
+error-reporting functions) are related to this bug — they look like
+separate dependency-chaining gaps, not investigated further here.
