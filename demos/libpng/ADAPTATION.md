@@ -251,3 +251,24 @@ Neither library's remaining unsuccessfully-harnessed functions
 (`TIFFSetField`/`TIFFWriteDirectory`; most of libsndfile's chunk-iterator and
 error-reporting functions) are related to this bug — they look like
 separate dependency-chaining gaps, not investigated further here.
+
+## Survey: does every library in `demos/run.sh` produce meaningful harnesses?
+
+Prompted by the fixes above, ran `ogharn.py` (same arguments each demo's
+`run_ogharn.sh`/`demos/run.sh` uses) against all six other libraries listed
+in `demos/run.sh`, to see how much of this class of bug is peculiar to
+libpng versus widespread.
+
+| Library | Final harnesses | Max coverage (edges) | Functions harnessed | Notes |
+|---|---|---|---|---|
+| **lua** | 23 | 4113 | 11/11 (all) | Richest result; no fix needed |
+| **openssl** | 1 | 2928 | 5/11 | Real `d2i_X509` DER-parsing harness |
+| **libxml2** | 15 | 1996 | 11/27 | Reaches real `xmlCtxtReadMemory`/`xmlNewTextReader` parsing |
+| **libtiff** | 4 (was 0) | 553 (was 0) | 5/8 | Fixed by the `uint8_t` → `char*` change above |
+| **libsndfile** | 9 (was 0) | 388 (was 0) | 7/18 | Fixed by the `uint8_t` → `char*` change above |
+| **sqlite** | 0 | 0 | 2/7 (`sqlite3_open`, `sqlite3_prepare_v2` only) | `sqlite3_step`/`sqlite3_finalize`/`sqlite3_reset`/`sqlite3_close` never harnessed — looks like a separate dependency-chaining gap (the `sqlite3_stmt*` handle `sqlite3_prepare_v2` produces doesn't get threaded into the later calls), not investigated further here |
+
+3 of the 6 (lua, openssl, libxml2) already worked without any changes. 2 of
+the remaining 3 (libtiff, libsndfile) were fixed by the `uint8_t`-typedef
+workaround documented above. sqlite's failure is a distinct, unexplored
+issue.
