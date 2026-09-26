@@ -3,6 +3,14 @@
 Pull the container from `ghcr.io/mayant15/ogharn:main`. This is the same as building
 `docker build -t <tag> .` in this repository.
 
+# Running
+
+Run the container mounting demos with:
+```
+docker run -v $PWD/demos:/root/demos -it <tag>
+```
+Now from inside a demo, run `./run_ogharn.sh`.
+
 # Static Analysis
 
 Multiplier's release binary ships its own bundled Clang/LLVM front-end for
