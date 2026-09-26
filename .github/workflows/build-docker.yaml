@@ -31,6 +31,6 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
-          tags: "ghcr.io/mayantm15/ogharn:main"
+          tags: "ghcr.io/mayant15/ogharn:main"
           cache-from: type=gha
           cache-to: type=gha
