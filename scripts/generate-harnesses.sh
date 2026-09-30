@@ -8,17 +8,20 @@ run_project() {
   DEMO="$1"
   shift
 
+  OUT="$1"
+  shift
+
   echo "[*] running $DEMO"
 
   cd $DEMO
-  ogharn.py -i $PWD -n 3 -m $PWD/lib.db -r b -d -f -c $PWD/config.yaml "$@"
+  { time ogharn.py -o $OUT -i $PWD -n 3 -m $PWD/lib.db -r b -d -f -c $PWD/config.yaml "$@"; } 2>&1 | tee "$OUT.log"
   cd ..
 }
 
-run_project libpng     -o out -h png.h png-support.h
-run_project libtiff    -o out -h tiffio.h tiff-support.h
-run_project libsndfile -o out -h sndfile.h sndfile-support.h
-run_project libxml2    -o out -h libxml/parser.h libxml/xmlreader.h libxml/tree.h libxml/globals.h libxml/xmlIO.h
-run_project lua        -o out -h lua.h lauxlib.h
-run_project openssl    -o out -h openssl/x509.h openssl/x509_vfy.h x509-support.h
-run_project sqlite     -o out -h sqlite3.h
+run_project libpng     out-3 -h png.h png-support.h
+run_project libtiff    out-3 -h tiffio.h tiff-support.h
+run_project libsndfile out-3 -h sndfile.h sndfile-support.h
+run_project libxml2    out-3 -h libxml/parser.h libxml/xmlreader.h libxml/tree.h libxml/globals.h libxml/xmlIO.h
+run_project lua        out-3 -h lua.h lauxlib.h
+run_project openssl    out-3 -h openssl/x509.h openssl/x509_vfy.h x509-support.h
+run_project sqlite     out-3 -h sqlite3.h

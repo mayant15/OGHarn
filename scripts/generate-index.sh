@@ -73,7 +73,7 @@ fmt_count() {
   sed ':a;s/\B[0-9]\{3\}\>/,&/;ta' <<<"$1"
 }
 
-header=("Library" "Build \`lib_plain\`" "Index" "Functions")
+header=("Library" "Build" "Index" "Functions")
 rows=()
 failed=()
 for lib in "${libs[@]}"; do
@@ -87,15 +87,16 @@ for lib in "${libs[@]}"; do
       --env "PWD=$workdir" \
       "$image" bash -euo pipefail -c '
         build_s=-
-        if [[ ! -f lib_plain/compile_commands.json ]]; then
-          start=$SECONDS
-          make lib_plain
-          build_s=$((SECONDS - start))
-        fi
-        rm -rf lib.db lib.db-* mx
+
         start=$SECONDS
-        make run_mx
+        make lib lib_plain lib_fuzz
+        build_s=$((SECONDS - start))
+
+        # rm -rf lib.db lib.db-* mx
+        start=$SECONDS
+        # make run_mx
         index_s=$((SECONDS - start))
+
         # A clean mx-index exit does not guarantee a usable index (see
         # AGENTS.md, "-march=native"), so make sure declarations were found.
         count=$(mx-list-functions --db lib.db | wc -l)
