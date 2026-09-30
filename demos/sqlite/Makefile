@@ -29,13 +29,17 @@ lib: # build for harness generation. Dynamic linking, asan, and afl instrumentat
 	export AFL_USE_ASAN=1
 	export AFL_USE_UBSAN=1
 	rm -rf $(LIB_NAME)
-	git clone $(LIB_REPO) $(LIB_NAME)
-	cd $(LIB_NAME) && \
-	git checkout 0df847cc776131919935658230fe2e629906dabb && \
-	./configure \
+	curl "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=8c432642572c8c4b" \
+		-o "lib.tar.gz" && \
+	mkdir -p "$(LIB_NAME)" && \
+	tar -C "$(LIB_NAME)" --strip-components=1 -xzf "lib.tar.gz" && \
+	cd "$(LIB_NAME)" && \
+	./configure --enable-rtree \
 	CC=$(CC_FUZZ) CXX=$(CXX_FUZZ) \
-	CFLAGS="-DSQLITE_ENABLE_API_ARMOR" \
-	CXXFLAGS="-DSQLITE_ENABLE_API_ARMOR" && \
+	CFLAGS="\
+        -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 \
+        -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 \
+        -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384" && \
 	make all -j12 && \
 	ln -sf libsqlite3.so libsqlite3.so.0
 	# sqlite's own (non-libtool) build sets SONAME "libsqlite3.so.0" on the
@@ -50,36 +54,42 @@ lib: # build for harness generation. Dynamic linking, asan, and afl instrumentat
 
 lib_plain: # build for harness generation. Dynamic linking, asan, and afl instrumentation
 	rm -rf $(LIB_NAME)_plain
-	git clone $(LIB_REPO) $(LIB_NAME)_plain
-	cd $(LIB_NAME)_plain && \
-	git checkout 0df847cc776131919935658230fe2e629906dabb && \
-	./configure \
+	mkdir -p "$(LIB_NAME)_plain" && \
+	tar -C "$(LIB_NAME)_plain" --strip-components=1 -xzf "lib.tar.gz" && \
+	cd "$(LIB_NAME)_plain" && \
+	./configure --enable-rtree \
 	CC=$(CC) CXX=$(CXX) \
-	CFLAGS="-DSQLITE_ENABLE_API_ARMOR" \
-	CXXFLAGS="-DSQLITE_ENABLE_API_ARMOR" && \
+	CFLAGS="\
+        -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 \
+        -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 \
+        -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384" && \
 	bear -- make all -j12
 
 lib_static:
 	rm -rf $(LIB_NAME)_static
-	git clone $(LIB_REPO) $(LIB_NAME)_static
-	cd $(LIB_NAME)_static && \
-	git checkout 0df847cc776131919935658230fe2e629906dabb && \
-	./configure --static \
+	mkdir -p "$(LIB_NAME)_static" && \
+	tar -C "$(LIB_NAME)_static" --strip-components=1 -xzf "lib.tar.gz" && \
+	cd "$(LIB_NAME)_static" && \
+	./configure --disable-shared --enable-rtree \
 	CC=$(CC_FUZZ) CXX=$(CXX_FUZZ) \
-	CFLAGS="-DSQLITE_ENABLE_API_ARMOR" \
-	CXXFLAGS="-DSQLITE_ENABLE_API_ARMOR" && \
+	CFLAGS="\
+        -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 \
+        -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 \
+        -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384" && \
 	make all -j12
 
 
 lib_fuzz:  # build for fuzzing. Static linking with afl instrumentation
 	rm -rf $(LIB_NAME)_fuzz
-	git clone $(LIB_REPO) $(LIB_NAME)_fuzz
-	cd $(LIB_NAME)_fuzz && \
-	git checkout 0df847cc776131919935658230fe2e629906dabb && \
-	./configure --static --with-tclsh=/usr/bin/tclsh8.6 \
+	mkdir -p "$(LIB_NAME)_fuzz" && \
+	tar -C "$(LIB_NAME)_fuzz" --strip-components=1 -xzf "lib.tar.gz" && \
+	cd "$(LIB_NAME)_fuzz" && \
+	./configure --disable-shared --enable-rtree \
 	CC=$(CC_FUZZ) CXX=$(CXX_FUZZ) \
-	CFLAGS="-DSQLITE_ENABLE_API_ARMOR" \
-	CXXFLAGS="-DSQLITE_ENABLE_API_ARMOR" && \
+	CFLAGS="\
+        -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 \
+        -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 \
+        -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384" && \
 	make all -j12
 
 run_mx: # Use Multiplier to index the library

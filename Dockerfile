@@ -34,6 +34,7 @@ RUN apt-get update \
         python3.12-venv \
         xz-utils \
         zlib1g-dev \
+        tcl \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/multiplier \
