@@ -41,16 +41,7 @@ lib: # build for harness generation. Dynamic linking, asan, and afl instrumentat
         -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 \
         -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384" && \
 	make all -j12 && \
-	ln -sf libsqlite3.so libsqlite3.so.0
-	# sqlite's own (non-libtool) build sets SONAME "libsqlite3.so.0" on the
-	# built libsqlite3.so but doesn't create a file/symlink with that exact
-	# name -- normally `make install` or ldconfig would. Without it, the
-	# harness's runtime NEEDED entry ("libsqlite3.so.0") never matches
-	# anything in DEPS_LDD, so the dynamic loader silently falls back to
-	# whatever uninstrumented libsqlite3.so.0 the base OS image happens to
-	# have installed, and every harness fuzzes that instead -- with zero
-	# coverage feedback from the actual instrumented build. See
-	# ADAPTATION.md.
+	ln -s .libs/libsqlite3.so libsqlite3.so
 
 lib_plain: # build for harness generation. Dynamic linking, asan, and afl instrumentation
 	rm -rf $(LIB_NAME)_plain
@@ -70,7 +61,7 @@ lib_static:
 	mkdir -p "$(LIB_NAME)_static" && \
 	tar -C "$(LIB_NAME)_static" --strip-components=1 -xzf "lib.tar.gz" && \
 	cd "$(LIB_NAME)_static" && \
-	./configure --disable-shared --enable-rtree \
+	./configure --enable-rtree \
 	CC=$(CC_FUZZ) CXX=$(CXX_FUZZ) \
 	CFLAGS="\
         -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 \
@@ -84,7 +75,7 @@ lib_fuzz:  # build for fuzzing. Static linking with afl instrumentation
 	mkdir -p "$(LIB_NAME)_fuzz" && \
 	tar -C "$(LIB_NAME)_fuzz" --strip-components=1 -xzf "lib.tar.gz" && \
 	cd "$(LIB_NAME)_fuzz" && \
-	./configure --disable-shared --enable-rtree \
+	./configure --enable-rtree \
 	CC=$(CC_FUZZ) CXX=$(CXX_FUZZ) \
 	CFLAGS="\
         -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 \
