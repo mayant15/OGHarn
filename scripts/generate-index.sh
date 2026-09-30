@@ -92,9 +92,9 @@ for lib in "${libs[@]}"; do
         make lib lib_plain lib_fuzz
         build_s=$((SECONDS - start))
 
-        # rm -rf lib.db lib.db-* mx
+        rm -rf lib.db lib.db-* mx
         start=$SECONDS
-        # make run_mx
+        make run_mx
         index_s=$((SECONDS - start))
 
         # A clean mx-index exit does not guarantee a usable index (see
