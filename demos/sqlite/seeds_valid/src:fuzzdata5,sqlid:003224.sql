@@ -1,1 +1,0 @@
- PRAGMA mmap_size journal_s decimal(1,1)ize_timilL;

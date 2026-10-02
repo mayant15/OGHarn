@@ -1,1 +1,0 @@
-	PRAGMA synchronous (255) in

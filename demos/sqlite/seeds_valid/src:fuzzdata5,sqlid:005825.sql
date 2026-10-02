@@ -1,1 +1,0 @@
-;SELECT  group_concat(1,1)IN(2,14,12,4,"","b")

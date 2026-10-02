@@ -1,1 +1,0 @@
-	SELECT "Å unicode(1)"GLOB"???8??ÅÅvvv"GLOB"*??6vv"v6vv

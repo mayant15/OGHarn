@@ -1,1 +1,0 @@
-SELECT time(CURRENT_TIME);

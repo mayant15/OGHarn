@@ -1,5 +1,0 @@
-PRAGMA auto_vacuum=1;
-CREATE TABLE t1(a, b);
-CREATE INDEX i ON t1(a);
-CREATE TABLE i ON ;
-CR

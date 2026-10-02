@@ -1,2 +1,0 @@
-SELECT CAST (zeroblob(100) AS INT000R);SELECT CAST (zeroblob(100) AS INT000R);
-

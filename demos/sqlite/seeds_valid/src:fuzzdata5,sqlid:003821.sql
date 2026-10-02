@@ -1,1 +1,0 @@
- SELECT "a"FROM(t1)USING(r

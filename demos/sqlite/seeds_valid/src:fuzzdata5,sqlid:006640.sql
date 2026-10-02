@@ -1,1 +1,0 @@
-ANALYZE;PRAGMAYZE;PRAGMA foreign_key_check

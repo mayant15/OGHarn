@@ -1,1 +1,0 @@
-ANALYZE;	PRAGMA auto_vacuum	= 	+2 days; ;PRSAA

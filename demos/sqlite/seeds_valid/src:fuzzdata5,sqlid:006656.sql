@@ -1,1 +1,0 @@
-ANALYZE;PRAGMA threads							 (3208896)		 

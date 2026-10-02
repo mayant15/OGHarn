@@ -1,1 +1,0 @@
- DETACH( SELECT 1)in( SELECT 1)in( SELECT 1)

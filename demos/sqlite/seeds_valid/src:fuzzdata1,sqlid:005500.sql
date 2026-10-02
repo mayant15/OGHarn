@@ -1,1 +1,0 @@
-CREATE VIRTUAL TABLE t0 USING rtree(i0, x0, x2, y1, y2);VACUUM

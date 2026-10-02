@@ -1,1 +1,0 @@
-SELECT LIKE("¡",7,"¡")""WHERE""

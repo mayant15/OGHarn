@@ -1,1 +1,0 @@
-SELECT likelihood(1,1)1

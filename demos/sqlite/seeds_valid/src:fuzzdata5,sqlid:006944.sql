@@ -1,1 +1,0 @@
-DETACH min( count(unt(0XDEFAULT0x),1-19NOT

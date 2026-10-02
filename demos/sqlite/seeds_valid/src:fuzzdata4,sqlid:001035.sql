@@ -1,1 +1,0 @@
-SELECT MiN(4)iN(SELECT MiN(4)iN(337,miN(4)))

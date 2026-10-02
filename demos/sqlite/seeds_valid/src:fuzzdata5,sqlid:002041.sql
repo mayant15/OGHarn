@@ -1,1 +1,0 @@
-	SELECT ""AND""*""COLLATE""IS""IS""IS""W

@@ -1,2 +1,0 @@
-ATTACH''AS nonanEt03;
-DROP TRIGGER t03 .XI;

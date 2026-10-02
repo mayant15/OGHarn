@@ -1,1 +1,0 @@
-	SELECT NOT@0str()<11""WHERE""OR""OR""OR"ATàŒ"""OR"","

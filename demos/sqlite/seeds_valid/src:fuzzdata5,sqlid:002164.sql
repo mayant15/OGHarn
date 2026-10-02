@@ -1,1 +1,0 @@
-	SELECT (1,1,1)""WHERE""&""""*""OR""OR"AT s?0+,"O

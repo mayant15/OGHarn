@@ -1,5 +1,0 @@
-CREATE TABLE t1(a INT,b INTEGER, c TEXT, d BLOB, e ANY,
-    UNIQUE(c) ON CONFLICT ignore,
-    PRIMARY KEY(b),
-    UNIQUE(c) ON CONFLICT fail
-) W;

@@ -1,1 +1,0 @@
-	SELECT instr(25-6, datetime(1 -11))""WHERE""&""*""

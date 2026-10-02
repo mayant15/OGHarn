@@ -1,1 +1,0 @@
-	SELECT @1&""""""OR""OR""OR""OR"AT‡å"

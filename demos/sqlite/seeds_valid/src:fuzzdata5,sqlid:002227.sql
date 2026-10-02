@@ -1,1 +1,0 @@
-	SELECT @1str >=11""WHERE""&""""""OR""OR""OR""OR""OR""OR""OR""

@@ -1,1 +1,0 @@
- SELECT avg(31), avg(DISTINCT:31), avg(:3231),(11)I

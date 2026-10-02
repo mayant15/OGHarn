@@ -1,1 +1,0 @@
-	PRAGMA collation_list cache_spill likely(1) foreign_keys, sqlitstr(C threadsROSSsi1))

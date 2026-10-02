@@ -1,2 +1,0 @@
-CREATE TABLE t14(a,b,c);
-INSERT INTO t14 VALUES( lower(1),5,6) INTERSECT VALUES( lower(8+88881),3,1),( total(1),1,3);

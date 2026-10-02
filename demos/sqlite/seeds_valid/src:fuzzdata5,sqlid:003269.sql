@@ -1,1 +1,0 @@
- PRAGMA fullfsyncsult_callbacks(1);	 PRAGMA ¿ÿÿÿÿ¿ks(1);	 PRAGMA  empty_result_callbacks(1);	 PRAGMA ¿ÿÿÿÿÊÄ;;;VACUUM;;;;;;;;ANALYZE;;;;;;;;;;;;;;;;;¿¿¿¿¿¿¿¿¿;ANAL¿¿¿¿¿¿¿¿¿¿¿¿¿CURRENT_TIME¿¿¿¿¿¿¿ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿ¿¿¿¿¿¿¿¿¿¿ÿÿÿÿPRAGMA ¿¿¿¿¿¿¿

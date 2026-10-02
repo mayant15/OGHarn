@@ -1,4 +1,0 @@
-CREATE TABLE temp.t0(a, b);
-ALTER TABLE t0 ADD c 
-;
-ALTFR TAt0 A WHE

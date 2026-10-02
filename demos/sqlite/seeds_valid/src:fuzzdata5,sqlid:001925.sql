@@ -1,1 +1,0 @@
-	SELECT """*2f~vาว88888"GLOB"*v*[^'fV;vvvvvV"vvvv

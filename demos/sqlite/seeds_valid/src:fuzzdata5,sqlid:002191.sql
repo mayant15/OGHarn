@@ -1,1 +1,0 @@
-	SELECT @1,(0)""WHERE""&""""""OR""OR likely(1)t(0)""WHERE"

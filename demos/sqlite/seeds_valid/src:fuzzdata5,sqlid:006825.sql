@@ -1,1 +1,0 @@
-CREATE TABLE ÿ(ÿ);PRAGMA writable_schema=ON;UPDATE sqlite_master SET sql='S';VACUUM

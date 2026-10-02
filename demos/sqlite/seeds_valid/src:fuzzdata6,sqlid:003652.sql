@@ -1,2 +1,0 @@
-CREATE TABLE t7(a UNIQUE, b UNIQUE);
-INSERT INTO t7(a,b) SELECT(1,1)=(1, total_changes() COLLATE binary) DO NOTHING;

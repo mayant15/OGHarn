@@ -1,1 +1,0 @@
-	SELECT  time(1,4,1)""WHERE""&""OR"AT s4AT +"

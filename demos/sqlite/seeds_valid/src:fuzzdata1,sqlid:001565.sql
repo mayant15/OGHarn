@@ -1,2 +1,0 @@
-CREATE TABLE t0(a,b,c,d,e, PRIMARY KEY(e,b,c,d,e));
-SELECT * FROM t0 WHERE a=? AND b=?BETWEEN?AND c=?BETWEEN? AND d=? AND e=A;

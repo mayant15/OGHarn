@@ -1,1 +1,0 @@
-CREATE VIEW a00.v0 AS SELECT#ê:memory:;

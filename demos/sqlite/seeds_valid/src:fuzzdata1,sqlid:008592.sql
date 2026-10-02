@@ -1,1 +1,0 @@
-SELECT CAST(zeroblob(100) AS BLOB);

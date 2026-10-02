@@ -1,1 +1,0 @@
-	PRAGMA soft_heap_limit												 (0)			,			WITHOUT	I							

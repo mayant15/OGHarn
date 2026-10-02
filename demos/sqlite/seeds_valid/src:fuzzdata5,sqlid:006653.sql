@@ -1,1 +1,0 @@
-ANALYZE;PRAGMA soft_heap_limit(3208896)		 

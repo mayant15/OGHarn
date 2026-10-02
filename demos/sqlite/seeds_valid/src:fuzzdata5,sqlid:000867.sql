@@ -1,1 +1,0 @@
-	ANALYZE;BEGIN;;	ANALYZE TEMP	 	; PRAGMA temp_store (1)NA 	T

@@ -1,1 +1,0 @@
-	PRAGMA page_count	; PRAGMA page_count	; 	VACUUM	SELEC
