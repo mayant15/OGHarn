@@ -1,1 +1,0 @@
-SELECT quote(likely(x''));
