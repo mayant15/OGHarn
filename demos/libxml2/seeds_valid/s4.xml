@@ -1,4 +1,0 @@
-<document>
-  <script><![CDATA[if (a < b && b > 0) { return "ok"; }]]></script>
-  <note><!-- valid comment -->done</note>
-</document>
