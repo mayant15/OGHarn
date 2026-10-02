@@ -1,0 +1,5 @@
+CREATE TABLE t1(a, b, PRIMARY KEY(a,b));
+INSERT INTO t1 VALUES(1,1),(1,2);
+CREATE TABLE t2(x, y, PRIMARY KEY(x,y));
+INSERT INTO t2 VALUES(3,3),(4,4);
+SELECT sqlite_source_id() a, x FROM t1, t2 ORDER BY 1, 2;

@@ -1,0 +1,1 @@
+	SELECT instr(25,- julianday(1))""WHERE""&""*""

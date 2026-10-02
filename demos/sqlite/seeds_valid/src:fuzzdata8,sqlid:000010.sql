@@ -1,0 +1,39 @@
+
+--
+SELECT (
+WITH t1(a) AS (VALUES(1))
+SELECT (
+WITH t2(b) AS (
+WITH t3(c) AS (
+WITH t4(d) AS (VALUES(true) )
+SELECT t4a.d FROM t4 AS t4a JOIN t4 AS LEFT JOIN t4 AS t3 )
+SELECT c FROM t3 WHERE 1> (SELECT (
+WITH t1(a) AS (VALUES( c ))
+SELECT (
+WITH t2(b) AS (
+WITH t3(c) AS (
+WITH t4(d) AS (VALUES('') )
+SELECT t4a.d FROM t4 AS t4a JOIN t4 AS t4b LEFT JOIN t4 AS t3 )
+SELECT c FROM (SELECT (
+WITH t2(b) AS (
+WITH t3(c) AS (
+WITH t4(d) AS (VALUES('') )
+SELECT t4a.d FROM t4 AS t4a JOIN t4 AS t4b LEFT JOIN t4 AS t3 )
+SELECT c FROM t3 WHERE current_time GLOB 1 )
+SELECT t2a.b FROM (SELECT t2a.b FROM t2 AS t2a JOIN t2 AS t2x
+) AS t2a JOIN t2 AS t2x
+)
+FROM t1 GROUP BY 1
+) WHERE current_time GLOB 1 )
+SELECT t2a.b FROM (SELECT t2a.b FROM t2 AS t2a JOIN t2 AS t2x
+) AS t2a JOIN t2 AS t2x
+)
+FROM t1 GROUP BY 1
+)
+GROUP BY 1.776) )
+SELECT t2a.b FROM t2 AS t2a JOIN t2 AS t2x
+)
+FROM t1 GROUP BY 1
+)
+WITH GROUP BY 1;
+Y 1) 1;

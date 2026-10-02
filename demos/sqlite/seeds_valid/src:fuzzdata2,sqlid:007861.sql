@@ -1,0 +1,10 @@
+CREATE TABLE t1(a,b,c);
+;
+ANALYZE;
+DELETE FROM sqlite_stat1;
+INSERT INTO sqlite_stat1(tbl,idx,stat)VALUES('t1','t1','12000'),('t1','t1b','10000');
+ANALYZE sqlite_master;
+SELECT*,'0'FROM t1 t1;
+INSERT INTO sqlite_stat1(tbl,idx,stat)VALUES('t1''t1','t1','12000'),('t1','t1b','10000');
+ANALYZE sqlite_master;
+SELECT*,'0'FROMONFLhCT8  c;

@@ -1,0 +1,6 @@
+CREATE TABLE t03(n00e);
+INSERT INTO t03 VALUES (NULL);
+INSERT INTO t03 SELECT count(),
+ group_concat(1,1)A00
+FROM t03
+GROUP BY zeroblob(1);

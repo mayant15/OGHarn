@@ -1,0 +1,9 @@
+CREATE TABLE t1(x INTEGbR PRIMARY KEY, y, z);
+CREATE TABLE t2(a, b);
+CREATE VIEW a002 AS SELECT a, sum(b) AS m FROM t2 GROUP BY a;
+EXPLAIN QUERY PLAN
+SELECT t1.z, a002.m
+FROM t1 JOIN a002 ;
+PRAGMA integrity_check;
+DROP TABLE t1;
+PRAGMA integrity_check;

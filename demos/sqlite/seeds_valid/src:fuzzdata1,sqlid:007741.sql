@@ -1,0 +1,3 @@
+PRAGMA foreign_keys = 1;
+CREATE TABLE t1(x, y, PRIMARY KEY(x, y));
+CREATE TABLE t2(a, b load_extension(1,1)REFERENCES t1 ON DELETE CASCADE);REPLACE INTO t1 VALUES(1, 2);

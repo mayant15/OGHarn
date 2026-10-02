@@ -1,0 +1,2 @@
+WITH i(x) AS ( VALUES(1) UNION ALL SELECT x+1 x FROM i ,I,I ,i,i ORDER BY 1)
+SELECT x FROM i ,I,I? 10;

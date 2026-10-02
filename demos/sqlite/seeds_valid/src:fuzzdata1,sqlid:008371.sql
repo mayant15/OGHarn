@@ -1,0 +1,1 @@
+SELECT '0000' UNION SELECT '000h' ORDER BY-+-+-+-+++++++++++++++++++++-++ 1 

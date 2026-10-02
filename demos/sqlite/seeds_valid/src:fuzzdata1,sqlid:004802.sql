@@ -1,0 +1,3 @@
+CREATE TaBLE t3(a EXINTEGER PRIMARY KEY, b, c, d, e, f);
+CREATE INDEX t00000 ON t3(b, c, d, e);
+SELECT a FROM t3 WHERE b<2 AND c=3 ORDER BY b DESC,d DESC, e DESC, b,  e DESC, b, c, a DESC;

@@ -1,0 +1,2 @@
+WITH i AS ( VALUES(1) INTERSECT SELECT randomblob(1)i ORDER BY 1)
+SELECT avg(1) x FROM i ,I, i ,I;

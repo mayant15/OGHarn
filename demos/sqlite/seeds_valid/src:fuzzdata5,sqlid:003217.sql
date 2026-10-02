@@ -1,0 +1,1 @@
+ PRAGMA table_info journal_size_limitîóNOT+;

@@ -1,0 +1,1 @@
+ SELECT "a"IN nINTERSECT SELECT "a"IN nullif(2,1)

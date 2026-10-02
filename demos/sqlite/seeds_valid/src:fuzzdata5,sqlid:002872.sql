@@ -1,0 +1,37 @@
+	VACUUM; ; 	VACUUM; 
+SAVEPOINT
+
+
+
+ 	VACUUMÅUUM; 	 ANALYZE 	; 	SAVEPOINT
+
+
+
+ 	VCUUM; 
+SAVEPOINT
+
+
+
+ßöß¾±¾LEASE ; 
+SAVEPOINT
+
+
+
+ßöß¾±¾«YZE 	;RELEASE 	SAVEPOINT
+
+
+
+ 	VACUUMÅUUM; 	 ANALYZE 	; 	SAVEPOINT
+
+
+
+ 	VCUUM; 
+SAVEPOINT
+
+
+
+ßöß¾±¾«YZE 	;RELEASE 	SAVEPOINT
+
+
+
+ 	VACUUM; 	ANALYZE 	; ;;	S;

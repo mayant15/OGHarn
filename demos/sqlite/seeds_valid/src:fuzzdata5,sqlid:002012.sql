@@ -1,0 +1,1 @@
+	SELECT """v*v"""GLOB"*v*[Vÿ'f-ÿÿTÿÿÿÿÿÿ"vvvv

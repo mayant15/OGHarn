@@ -1,0 +1,1 @@
+DETaCH~glob(2,(1)AND(0)AND-~2,(1)AND(0),(1)AND(0)AND-ÿ

@@ -1,0 +1,3 @@
+CREATE VIRTUAL TABLE rt USING rtree(i0, x0, x2);
+INSERT INTO rt VALUES(1,.2 ,3);
+SELECT * FROM rt;

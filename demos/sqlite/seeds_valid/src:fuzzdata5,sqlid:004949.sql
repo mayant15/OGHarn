@@ -1,0 +1,1 @@
+ VACUUM;SELECT  time(1.4,1)""WHERE":"."T"& nOR""OELAT"

@@ -1,0 +1,1 @@
+ PRAGMA wal_autocheckpoint¼ (1) jouFAIL_size_limit

@@ -1,0 +1,1 @@
+	SELECT		(1,1)öö¶«HOU	UNION			ALL				SELECT	(0/1)1.91.,1;;EXP/

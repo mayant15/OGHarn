@@ -1,0 +1,4 @@
+SELECT 0 AS x, 0 AS y
+UNION
+SELECT 2 AS y, -0 AS x
+ORDER BY x LIMIT "a","b" 1;

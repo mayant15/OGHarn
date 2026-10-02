@@ -1,0 +1,1 @@
+	SELECT instr(.1-6,  zeroblob(1))""WHERE""&+""""&""*""

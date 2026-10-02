@@ -1,0 +1,1 @@
+													SELECT					 changes()ö¶«HOU	UNION										SELECT(											SELECT					 changes()ö¶«HOU	UNION										SELECT(		 SE		 SELECT load_extensio			 avg(0)ÌööANALYZn(1,0)WHERE+E;S

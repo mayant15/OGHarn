@@ -1,0 +1,1 @@
+DETACH min()in(n()in()in())in(n)in(n()in()in())in()in()in())in(n()9

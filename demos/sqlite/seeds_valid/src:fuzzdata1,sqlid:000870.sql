@@ -1,0 +1,3 @@
+CREATE TABLE t0 ( a,ba, b, PRIMARY KEY(b, a)) WITHOUT ROWID;
+INSERT INTO t0(a, b) VALUES('ab0', '000');
+UPDATE t0 SET b='ab0', b='000';

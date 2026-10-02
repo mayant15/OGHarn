@@ -1,0 +1,1 @@
+;SELECT(2,0)IN( SELECT 2,999*0)""WHERE""OR""*""OR""

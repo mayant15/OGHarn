@@ -1,0 +1,2 @@
+CREATE TABLE t00b AS SELECT "a","b"COLLATE''LIKE "a","b";
+SE * 00b;

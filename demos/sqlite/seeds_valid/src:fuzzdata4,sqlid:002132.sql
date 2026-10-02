@@ -1,0 +1,1 @@
+SELECT?8 FROM(SELECT?8 Fach,jso„._each,vso"",jeach,vso"",js7"",js,_s_e"",eas7"",js,_s_e"",each,jo„._each,vso"",js7"",jso"",chh"")json_each Z

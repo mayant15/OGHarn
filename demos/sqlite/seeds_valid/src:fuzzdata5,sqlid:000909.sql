@@ -1,0 +1,1 @@
+	PRAGMA  quick_check	; 	VACUUM; 	PRAGMA  quick_check	; 	VACUUM; ;PRAGMA shrink_memory; 	VACUUM; 	PRAGMAM; ;PRAGMA shrink_memory; 	VACUUM; 	PRAGMA	; 	VACUUMELECT  a.bsqÿC	A	Uÿ gl	ANALYZE 	; 	VACUUM; ; 	VACUUM	; 	VACUUMELECT  a.bsqÿC	A	Uÿ gl	ANALYZE 	; 	VACUUM; ; 	VACUUM; 	 	VACUUM;	SELECT  a.bsqÿC	A	Uÿ gl

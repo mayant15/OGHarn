@@ -1,0 +1,3 @@
+SELECT *
+FROM (SELECT  -1e51 AS one FROM sqlite_master LOINCREMENT1)
+WHERE one LIKE one LIKE  '000000';

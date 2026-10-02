@@ -1,0 +1,10 @@
+ATTACH''AS nooname;
+ATTACH':ry:' AS ÿÿnaname;
+ATTACH':memory:' AS ÿÿoname;
+ATTACH':memory:' AS ÿÿnanamname;
+ATTACH'ÿme:' AS me;
+ATTACH'ÿme:' AS mee;
+ATTACH'ÿme:' AS m;
+ATTACH':my:' AS nme;
+ATTACH':my:' AS nmemmÿÿnammmÿÿname;
+ATTACH'ÿme:' AS mem;VACUUM;

@@ -1,0 +1,1 @@
+SELECT time(CURRENT_DATE);

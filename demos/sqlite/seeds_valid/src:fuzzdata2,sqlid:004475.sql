@@ -1,0 +1,3 @@
+WITH i(x) AS (WITH ‡Ö AS ( VALUES(P,2) )
+ VALUES(1,2) )
+SELECT * FROM i;

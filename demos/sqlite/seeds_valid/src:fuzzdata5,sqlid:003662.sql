@@ -1,0 +1,1 @@
+ SELECT "`" -2 || zeroblob(0)-zeroblob(0)-0 -4

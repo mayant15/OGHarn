@@ -1,0 +1,1 @@
+	SELECT	 randomblob(1)	UNION						SELECT				 zeroblob(1)Vöö¶«H

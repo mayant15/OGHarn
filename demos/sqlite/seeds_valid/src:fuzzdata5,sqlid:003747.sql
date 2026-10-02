@@ -1,0 +1,1 @@
+ SELECT "a"ISNULLISNULLÅSNULL

@@ -1,0 +1,4 @@
+CREATE TABLE t000(a PRIMARY KEY, b) WITHOUT rowid;
+CREATE INDEX t0000 ON t000(b);
+INSERT INTO t000 VALUES('s','s0'),('00000','000'),('0r000','m0r00r0');
+SELECT a, b, '0' FROM t000 WHERE a=='stat0'AND b='stat0' OR A='m0r00r0' ORDER BY +a;

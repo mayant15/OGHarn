@@ -1,0 +1,5 @@
+CREATE TABLE t0 (a primary key, b, c);
+INSERT INTO t0 values (0,00, 3);
+CREATE TRIGGER al AFTER UPDATE ON t0 BEGIN
+UPDATE OR IGNORE t0.a, c ;
+END;

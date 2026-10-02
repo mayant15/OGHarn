@@ -1,0 +1,1 @@
+ANALYZE;PRAGMA encoding=PRAGMA encoding

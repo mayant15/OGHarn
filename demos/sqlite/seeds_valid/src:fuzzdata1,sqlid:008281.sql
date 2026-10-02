@@ -1,0 +1,4 @@
+SAVEPOINT `a`;
+CREATE TABLE t0(a, b);ROLLBACK TO [a];
+ROLLBACK TO [a];
+C

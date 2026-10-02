@@ -1,0 +1,1 @@
+	SELECT instr(1,1)""""""WHERE""&"""""""""SELECT[ """""""OR"""""""""WHERE"BETWEEN"&""ÞÝ"""AND" """""""OR"""""""""WHERE"BETWEEN"&""ÞÝ"""AND"""""SELECT[ """""""OR"""""""""WHERE"BETWEEN"&""ÞÝ"""AND" """""""OR"""""""""WHERE"BETWEEN"&""ÞÝ"""AND""""""MAT strft"""""MAT strfSÿ§ÿ)

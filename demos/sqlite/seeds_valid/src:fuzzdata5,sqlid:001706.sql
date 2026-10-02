@@ -1,0 +1,1 @@
+	SELECT  trim(1, $11)""WHERE""&"RO"""OR""OR""

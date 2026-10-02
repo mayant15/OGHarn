@@ -1,0 +1,1 @@
+	SELECT """v*vLv GHOv[]][]]T"""GLOB"*v*[]]*[]T"""

@@ -1,0 +1,1 @@
+	SELECT  date() glob(SELECT  :date(1,q,1) glob( ?1)ÆÆÆÆÆÆ,1) glob(SELECT  :œž‹š×ÎÓ‹,1) glob(1,1)ÆÆÆÆ1,1)ÆÆ,1)ÆÆÆÆÆÆÆÆ¼SßŒ”ÿÿÿÿÿÿEFERVDD 

@@ -1,0 +1,2 @@
+WITH i(x) AS ( VALUES( 1=11) UNION SELECT  zeroblob(1) FROM i)
+SELECT x FROM i LIMIT 2 ;

@@ -1,0 +1,4 @@
+SELECT *
+FROM (SELECT name+1 AS one FROM sqlite_master LIMIT 1 OFFSET 1)
+Wster LIMIT 1 OFFSET 1)
+WHERamLIKE '000000';

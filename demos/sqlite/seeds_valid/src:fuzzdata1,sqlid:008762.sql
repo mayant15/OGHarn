@@ -1,0 +1,1 @@
+SELECT likelihood(NULL,20.5);

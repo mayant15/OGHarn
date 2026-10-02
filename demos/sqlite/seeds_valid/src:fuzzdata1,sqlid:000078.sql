@@ -1,0 +1,1 @@
+ANALYZE temp. [a]

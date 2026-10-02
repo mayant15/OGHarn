@@ -1,0 +1,3 @@
+CREATE TABLE t102 (i0 TEXT UNIQUE NOT NULL);
+INSERT INTO t102 VALUES ('0');
+SELECT DISTINCT* FROM t102 AS t0 /* */JOIN t102  t1 ON t1.i0 GLOB  sqlite_compileoption_used(1)= t0.i0 OR (t0.i0=t1.i0));

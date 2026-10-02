@@ -1,0 +1,1 @@
+ PRAGMA case_sensitive_like=no jural_size_limitñ

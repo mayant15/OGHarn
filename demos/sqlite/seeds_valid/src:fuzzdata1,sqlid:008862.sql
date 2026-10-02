@@ -1,0 +1,1 @@
+SELECT quote(likely(x'000000BBBBBBBBBBBB'));

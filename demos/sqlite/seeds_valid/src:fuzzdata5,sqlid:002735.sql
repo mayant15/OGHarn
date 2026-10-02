@@ -1,0 +1,1 @@
+	SELECT""OR 1""WHERE""&""OR""OR""OR""OR""OR""OR""OR""O]R""

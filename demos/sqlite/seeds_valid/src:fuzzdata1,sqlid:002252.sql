@@ -1,0 +1,2 @@
+CREATE TABLE t1(a, b);
+CREATE INDEX [a]ON t1(a);SELECT * FROM t1 INDEXED BY "a"×H

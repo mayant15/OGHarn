@@ -1,0 +1,1 @@
+SELECT CAST (zeroblob(1E9) AS INT100R);

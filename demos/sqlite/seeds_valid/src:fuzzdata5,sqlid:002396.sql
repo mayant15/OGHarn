@@ -1,0 +1,1 @@
+	SELECT instr(1,1)""""""WHERE""&"""""""""SELECT[ """""""OR"""""""""WHERE"BETWEEN"&""ÞÝ"""AND""""""MAT strftime(1,1,1,1)"""""sqÿÿ glob(1,1ÿ§ÿ)OSSÿ§MAÿÿÿÿÿÿÿÿTCH" totÕl(1)"""""""""""sqÿÿ glob(1,1ÿ§ÿ)OSSÿ§ÿ)

@@ -1,0 +1,4 @@
+CREATE TABLE t8(a INT PRIMARY KEY, b, c);
+CREATE UNIQUE INDEX t8x ON t8((b||'x')COLLATE nocase);
+INSERT INTO t8(a,b,c) VALUES(1,'one',2),(2,'one',3)
+    ON CONFLICT((b||'x')COLLATE nocase) DO NOTHING;VACUUM

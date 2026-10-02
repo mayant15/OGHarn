@@ -1,0 +1,1 @@
+;SELECt(	SELECT "ECTÓB"*"EC"*"ECTÓB"*"EECTÓB"*1,41,1)IN(0,1,1);O"A,E

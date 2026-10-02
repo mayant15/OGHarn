@@ -1,0 +1,1 @@
+ REINDEX;EXPLAIN SELECT max(11), max(211), max(2)E/* 4

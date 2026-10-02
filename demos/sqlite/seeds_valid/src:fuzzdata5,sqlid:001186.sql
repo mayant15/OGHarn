@@ -1,0 +1,1 @@
+	SELECT   lower(:1)""WHERE""&""OR"O""RR"*""OR""

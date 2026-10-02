@@ -1,0 +1,4 @@
+CREATE TABLE t1(
+  a INT,
+  b INT UNIQUE,
+  c INT DEFAULT ( jsonrray(1)OR false) VALUES(1,2),(3,4),(1,2)ON CONFLICT(a,b) DO NOTHING;

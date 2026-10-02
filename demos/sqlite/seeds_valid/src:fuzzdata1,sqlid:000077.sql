@@ -1,0 +1,1 @@
+ALTER TABLE SqLiTe_master RENAME TO m00000;

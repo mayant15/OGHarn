@@ -1,0 +1,1 @@
+	PRAGMA short_column_names(˜Å);VACUUM;;VACUUM;;;;;

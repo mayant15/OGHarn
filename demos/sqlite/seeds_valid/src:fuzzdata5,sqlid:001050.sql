@@ -1,0 +1,1 @@
+	PRAGMA auto_vacuum	= 	4;VACUUM; PRAGMA  query_only	= 	4;VACUUM; 	

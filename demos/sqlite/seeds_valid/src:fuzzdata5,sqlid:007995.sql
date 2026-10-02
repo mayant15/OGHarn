@@ -1,0 +1,1 @@
+SELECT *,*,*FROM( SELECT*,*,*,*)11 CT*,*,*,*)11 )F

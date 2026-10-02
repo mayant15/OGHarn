@@ -1,0 +1,1 @@
+	SELECT """*vvf1ÿÿÿÿ88"GLOB"*v['f;vvvv-]"vvvvv

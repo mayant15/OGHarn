@@ -1,0 +1,3 @@
+CREATE TABLE t8(a INT PRIMARY KEY, b, c);
+CREATE UNIQUE INDEX t8x ON t8( 'a''x')T INTO tne',3)
+    ON CONFLICT((b||'x')) DO NOTHING;

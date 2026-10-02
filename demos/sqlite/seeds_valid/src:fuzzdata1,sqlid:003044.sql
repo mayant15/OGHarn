@@ -1,0 +1,10 @@
+CREATE TABLE t1(x, y DEFAULT(datetime('2001-00-01
+
+
+
+
+
+
+')));
+INSERT INTO t1(x)VALUES(1);
+SELE1;

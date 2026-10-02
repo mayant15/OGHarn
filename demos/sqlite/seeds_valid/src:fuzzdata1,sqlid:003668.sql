@@ -1,0 +1,10 @@
+CREATE TABLE t4(a,b,c,d,e,f,g,h,i);
+CREATE INDEX t4all ON t4(a,b,a,h);
+INSERT INTO t4 VALUES(1,2,3,4,5,6,7,8,9);
+ANALYZE;
+DELETE FROM sqlite_stat1;
+INSERT INTO sqlite_stat1
+VALUES('t4','t4all','000010 160000 40000 10000 2000 600 100 40 10');
+ANALYZE sqlite_master;
+SELECT * FROM t4 WHERE a=1;
+SELECT i FROM t4 WHERE b=2;SEL

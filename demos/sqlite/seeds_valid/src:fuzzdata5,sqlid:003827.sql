@@ -1,0 +1,1 @@
+ SELECT "a"FROM lower(1)iUSING(t1)r ,((t2)r

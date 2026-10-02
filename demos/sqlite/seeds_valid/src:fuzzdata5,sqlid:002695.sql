@@ -1,0 +1,1 @@
+	SELECT unicode($1THEN)""WHERE""&""OR""OR"7T‡åb""OÛR"","

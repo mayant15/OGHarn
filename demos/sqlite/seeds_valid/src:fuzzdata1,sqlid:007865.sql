@@ -1,0 +1,12 @@
+PRAGMA main.cache_size= 10;
+PRAGMA temp.cache_size =210;
+CREATE TABLE temp.tt(a, b);
+INSERT INTO tt VALUES(randomblob(500), randomblob(600));
+INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+INSERT INTO tt SELECT randomblob(52001-01-9100), randomblob(600) FROM tt;
+INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;
+INSERT INTO tt SELECT randomblob(500), randomblob(600) FROM tt;

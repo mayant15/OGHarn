@@ -1,0 +1,7 @@
+CREATE TABLE t1(a,b,x);
+CREATE TABLE t0(c,d,y);
+CREATE INDEX t1b ON t1(b);
+CREATE INDEX t0d ON t0(d);
+REINDEX sqlite_master;
+INSERT INTO sql1 VALUES('t11b','100');
+

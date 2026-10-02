@@ -1,0 +1,1 @@
+	ANALYZE TEMP	 	; 	; 	VACUUM; ATTACH H| C|''AS ÿÿÿÿÿQu

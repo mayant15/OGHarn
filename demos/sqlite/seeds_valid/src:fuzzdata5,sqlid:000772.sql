@@ -1,0 +1,1 @@
+	ANALYZE TEMP	 	; 	VACUUM; ; 		PRAGMA max_page_count (1) ; SELECT 18446744073709551615;;EXPLAIN SELECT 666666666660000000+++++++:++++:CUUM; ; 		PRAGMA cache_spill (32765) ; SELECT 6666;;EXPLAIN SELECT 666666666660000000+++++++:CUUM; ; 		PRAGMA cache_spill (0

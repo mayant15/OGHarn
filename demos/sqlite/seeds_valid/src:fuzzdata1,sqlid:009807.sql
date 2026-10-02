@@ -1,0 +1,2 @@
+WITH i(x) AS ( VALUES(1) UNION ALL SELECT x<1 FROM i ORDER BY 1)
+SELECT strftime(?, random()||10E3) x FROM i LIMIT 1+02

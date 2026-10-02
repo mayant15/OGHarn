@@ -1,0 +1,4 @@
+CREATE TABLE t0(a);
+INSERT INTO t0 VALUES('a');
+SELECT a| CAST(? AS clob000)< CAST(a AS clob000) FROM t0;
+ FROM 

@@ -1,0 +1,8 @@
+PRAGMA page_size= 1024;
+PRAGMA auto_vacuum = 2;
+CREATE TABLE t0(x);
+CREATE TABLE t4(x);
+CREATE TABLE t5(x);
+INSERT INTO t0 VALUES(randomblob(1000));
+CREATE TABLE t7(x);
+CREATE TABLE t8(x);VACUUM

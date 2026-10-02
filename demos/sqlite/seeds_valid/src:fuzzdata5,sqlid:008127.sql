@@ -1,0 +1,1 @@
+SELECT +5+ +++ hex(1)++++++++quote(1)+ hex(1)+++ quote(1)++ 70

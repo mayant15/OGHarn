@@ -1,0 +1,1 @@
+	SELECT nullif(2,1)  ""WHERE""&""*""*""OR""OR"AT s0AT +"

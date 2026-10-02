@@ -1,0 +1,1 @@
+; 	VACUUM; ; 	VACUUM; 	VACUUM; 		SELECT  date(1,q,1) glob(SELECT  :date(date(1,q,1) glob(SELECT  :date((date(1,q,1) glob(SELECT  :date(1,q,1) glob(1,1)ÆÆÆ1) glob(SELECT  :date((date(1,q,1) glob(SELECT  :date(1,q,1) glob(1,1)ÆÆÆ1,q,1)NOTNULL,1,q,1) glob(1,1)ÆÆÆ1,q,1)NOTNULL,1)ÆÆÆ laSt_inser

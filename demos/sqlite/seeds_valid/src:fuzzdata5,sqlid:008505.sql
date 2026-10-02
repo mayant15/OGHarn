@@ -1,0 +1,1 @@
+SELECT substr(1,2,1)++ printf( ';SELECT !trim(1%0o+ +C1%0o+ +CT ltrim(0;SELECT !tri :1m(1%0o+ +C1%0i+ +CT ltrim(1%p##%p# !trim;SELECT+.01010000000000000000(1%0o+ +C1%099999999999999999999999990000000u9999zis(1;SELECT "')""WHERE"ް­×"""%""

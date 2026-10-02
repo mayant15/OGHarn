@@ -1,0 +1,3 @@
+UPDATE sqlite_master
+SET r0000= $000000000
+WHERE t000 = '00000' AND n0000= '00';

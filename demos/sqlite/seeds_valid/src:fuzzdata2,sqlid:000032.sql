@@ -1,0 +1,13 @@
+create table t1(fne z UNIQUE);REINDEX;;;SAVEPOINT TMYZE;;REINDEX;;;SAVEPOINT TMYZE;;; 
+insert into t1 values(44444444);REINDEX;;;SAVEPOINT TMYZE;;REINDEX;;;SAVEPOINT TMYZE;;; 
+insert into t1 values(44444444441),
+(44441),
+(44471),
+(144441),
+(44444441),
+(44471),
+(144441),
+(44441),
+(44471),
+(144441);;;;;;
+i

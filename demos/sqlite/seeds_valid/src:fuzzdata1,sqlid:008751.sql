@@ -1,0 +1,1 @@
+SELECT group_concat(1,1) NOT IN () NOT IN (10 IN (10,10),110 IN (10,10),1) NOT IN (10 IN (10,10),1,10)900
