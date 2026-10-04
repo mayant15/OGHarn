@@ -22,7 +22,7 @@ DEPS_STAT = -I $(PWD)/$(LIB_NAME)_static/ \
 
 DEPS_DYN = -lsqlite3
 DEPS_STC = -l:libsqlite3.a -lm
-DEPS_LDD = $(PWD)/$(LIB_NAME)/
+DEPS_LDD = $(PWD)/$(LIB_NAME)/.libs/
 
 #------------------------------------------------------------------------
 lib: # build for harness generation. Dynamic linking, asan, and afl instrumentation
