@@ -29,8 +29,8 @@ lib: # build for harness generation. Dynamic linking, asan, and afl instrumentat
 	export AFL_USE_ASAN=1
 	export AFL_USE_UBSAN=1
 	rm -rf $(LIB_NAME)
-	curl "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=8c432642572c8c4b" \
-		-o "lib.tar.gz" && \
+	{ test -s lib.tar.gz || curl "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=8c432642572c8c4b" \
+		-o "lib.tar.gz"; } && \
 	mkdir -p "$(LIB_NAME)" && \
 	tar -C "$(LIB_NAME)" --strip-components=1 -xzf "lib.tar.gz" && \
 	cd "$(LIB_NAME)" && \
