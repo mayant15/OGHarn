@@ -41,7 +41,8 @@ while (($#)); do
 done
 
 if ((${#libs[@]} == 0)); then
-  libs=(libpng libtiff lua openssl sqlite libsndfile libxml2)
+  # libs=(libpng libtiff lua openssl sqlite libsndfile libxml2)
+  libs=(sqlite)
 fi
 
 for lib in "${libs[@]}"; do
