@@ -4,19 +4,25 @@
 #
 # Usage: scripts/generate-index.sh [--no-build] [-o|--output DIR] [lib ...]
 #
+# By default the image is built locally as ogharn:local. With --no-build,
+# the prebuilt ghcr.io/mayant15/ogharn:main is used instead (skipping the
+# build). Set OGHARN_IMAGE to override either default.
+#
 # The lib_plain/compile_commands.json files record absolute paths under
 # /root/demos, so ./demos is mounted at exactly that path in the container.
 # If a demo has no compile database yet, `make lib_plain` is run first.
 # With --output, each successfully indexed lib.db is copied to DIR/<lib>.db.
 # Build/index output for each lib is logged to demos/<lib>/index.log.
+# The final summary table is logged to demos/index-summary.log.
 #
 # Generated with AI.
 
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-image="${OGHARN_IMAGE:-ogharn:latest}"
+image="${OGHARN_IMAGE:-}"
 mount_point=/root/demos
+summary_log="$repo_root/demos/index-summary.log"
 
 usage() {
   echo "usage: $0 [--no-build] [-o|--output DIR] [lib ...]" >&2
@@ -53,8 +59,11 @@ for lib in "${libs[@]}"; do
 done
 
 if ((build)); then
+  image="${image:-ogharn:local}"
   echo "[index] Building $image"
   docker build -t "$image" "$repo_root"
+else
+  image="${image:-ghcr.io/mayant15/ogharn:main}"
 fi
 
 # Seconds as m:ss; anything non-numeric (e.g. "-" for a skipped build) as-is.
@@ -132,18 +141,21 @@ print_row() {
   done
   echo "$line"
 }
-echo
-print_row "${header[@]}"
-separators=()
-for w in "${widths[@]}"; do
-  separators+=("$(printf '%*s' "$w" '' | tr ' ' '-')")
-done
-print_row "${separators[@]}"
-for row in "${rows[@]}"; do
-  IFS='|' read -ra cells <<<"$row"
-  print_row "${cells[@]}"
-done
-echo
+{
+  echo
+  print_row "${header[@]}"
+  separators=()
+  for w in "${widths[@]}"; do
+    separators+=("$(printf '%*s' "$w" '' | tr ' ' '-')")
+  done
+  print_row "${separators[@]}"
+  for row in "${rows[@]}"; do
+    IFS='|' read -ra cells <<<"$row"
+    print_row "${cells[@]}"
+  done
+  echo
+} | tee "$summary_log"
+echo "[index] Summary logged to $summary_log"
 
 if [[ -n "$out_dir" ]]; then
   mkdir -p "$out_dir"
