@@ -8,6 +8,7 @@
 # /root/demos, so ./demos is mounted at exactly that path in the container.
 # If a demo has no compile database yet, `make lib_plain` is run first.
 # With --output, each successfully indexed lib.db is copied to DIR/<lib>.db.
+# Build/index output for each lib is logged to demos/<lib>/index.log.
 #
 # Generated with AI.
 
@@ -56,9 +57,6 @@ if ((build)); then
   docker build -t "$image" "$repo_root"
 fi
 
-log="$(mktemp)"
-trap 'rm -f "$log"' EXIT
-
 # Seconds as m:ss; anything non-numeric (e.g. "-" for a skipped build) as-is.
 fmt_time() {
   if [[ "$1" =~ ^[0-9]+$ ]]; then
@@ -77,7 +75,8 @@ header=("Library" "Build" "Index" "Functions")
 rows=()
 failed=()
 for lib in "${libs[@]}"; do
-  echo "[index] $lib"
+  log="$repo_root/demos/$lib/index.log"
+  echo "[index] $lib (log: $log)"
   workdir="$mount_point/$lib"
   # The container reports "__STATS__ <build s> <index s> <functions>" last;
   # build is "-" when an existing compile database was reused.
@@ -89,12 +88,12 @@ for lib in "${libs[@]}"; do
         build_s=-
 
         start=$SECONDS
-        make lib lib_plain lib_fuzz
+        time make lib lib_plain lib_fuzz
         build_s=$((SECONDS - start))
 
         rm -rf lib.db lib.db-* mx
         start=$SECONDS
-        make run_mx
+        time make run_mx
         index_s=$((SECONDS - start))
 
         # A clean mx-index exit does not guarantee a usable index (see
