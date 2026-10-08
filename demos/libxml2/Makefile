@@ -24,11 +24,10 @@ DEPS_LDD = $(PWD)/$(LIB_NAME)/.libs/
 
 #------------------------------------------------------------------------
 lib: # build for harness generation. Shared linking, asan, and afl instrumentation
-	export AFL_USE_ASAN=1
-	export AFL_USE_UBSAN=1
-
-	rm -rf $(LIB_NAME)
-	git clone $(LIB_REPO) $(LIB_NAME)
+	export AFL_USE_ASAN=1 && \
+	export AFL_USE_UBSAN=1 && \
+	rm -rf $(LIB_NAME) && \
+	git clone $(LIB_REPO) $(LIB_NAME) && \
 	cd $(LIB_NAME) && \
 	git checkout $(LIB_COMMIT) && \
 	./autogen.sh $(CONFIG_OPTS) --enable-shared --disable-static \

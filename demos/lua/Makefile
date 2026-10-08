@@ -16,11 +16,10 @@ DEPS_LDD = $(PWD)/$(LIB_NAME)/
 
 #------------------------------------------------------------------------
 lib: # build for harness generation. Static lib with asan and afl instrumentation
-	export AFL_USE_ASAN=1
-	export AFL_USE_UBSAN=1
-
-	rm -rf $(LIB_NAME)
-	git clone $(LIB_REPO) $(LIB_NAME)
+	export AFL_USE_ASAN=1 && \
+	export AFL_USE_UBSAN=1 && \
+	rm -rf $(LIB_NAME) && \
+	git clone $(LIB_REPO) $(LIB_NAME) && \
 	cd $(LIB_NAME) && \
 	git checkout $(LIB_COMMIT) && \
 	patch -p1 < ../patch.diff && \
