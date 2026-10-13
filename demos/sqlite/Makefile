@@ -16,7 +16,7 @@ LIB_REPO = https://github.com/sqlite/sqlite.git
 
 DEPS = -I $(PWD)/$(LIB_NAME)/ \
 	   -L $(PWD)/$(LIB_NAME)/
-	   
+
 DEPS_STAT = -I $(PWD)/$(LIB_NAME)_static/ \
 	  		-L $(PWD)/$(LIB_NAME)_static/
 
@@ -40,7 +40,7 @@ lib: # build for harness generation. Dynamic linking, asan, and afl instrumentat
         -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 \
         -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 \
         -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384" && \
-	make all -j12 && \
+	make all -j12 BCC=cc && \
 	ln -s .libs/libsqlite3.so libsqlite3.so
 
 lib_plain: # build for harness generation. Dynamic linking, asan, and afl instrumentation
