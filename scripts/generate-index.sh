@@ -154,7 +154,7 @@ print_row() {
     print_row "${cells[@]}"
   done
   echo
-} | tee "$summary_log"
+} | tee -a "$summary_log"
 echo "[index] Summary logged to $summary_log"
 
 if [[ -n "$out_dir" ]]; then
